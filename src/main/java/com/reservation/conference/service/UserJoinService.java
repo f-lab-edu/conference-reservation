@@ -1,28 +1,28 @@
 package com.reservation.conference.service;
 
-import com.reservation.conference.dto.User;
-import com.reservation.conference.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.reservation.conference.dto.UserJoinDTO;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserJoinService {
 
-
-    @Autowired
-    private UserMapper userMapper;
-
-
     // 회원가입
-   public Long join(User user){
-        validateDuplicateCompany(user); // 검증
-        userMapper.save(user);
-        return user.getId();
+    public UserJoinDTO join(UserJoinDTO userJoinDTO){
+        if (checkUserIdExist(userJoinDTO.getUserName())){
+            return userJoinDTO;
+        }else{
+            return null;
+        }
     }
 
-    // 중복 회원 체크
-    private void validateDuplicateCompany(User user){
-        userMapper.findByName(user.getUserName())
-                .ifPresent(m->{
-                    throw new IllegalStateException("이미 존재하는 회원입니다.");
-                });
+    // 중복 회원 검증
+    public boolean checkUserIdExist(String userName){
+
+        // boolean isExistUserId = userMapper.isExistUserId(userId);
+        if(userName != null){ //isExistUserId
+            return true;
+        }else{
+            return false;
+        }
     }
 }
