@@ -12,9 +12,9 @@ public class UserLoginService {
      */
     public String login(Long id, String password) throws Exception {
 
-        String userPw = SecurityUtil.encryptPassword(password);
+        String encryptPassword = SecurityUtil.encryptPassword(password);
 
-        return userPw;
+        return encryptPassword;
     }
 
 

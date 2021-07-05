@@ -10,16 +10,16 @@ public class SecurityUtil {
      * */
     public static String encryptPassword(String str) throws Exception {
 
-        String shaPw = "";
+        String encryptPassword = "";
 
         try {
             //입력된 암호를 SHA256으로 암호화함.
-            shaPw = getHex(genSHA256(str.getBytes()));
+            encryptPassword = getHex(genSHA256(str.getBytes()));
         } catch (Exception e) {
-            shaPw = "";
+            encryptPassword = "";
         }
 
-        return shaPw;
+        return encryptPassword;
     }
 
     /**
