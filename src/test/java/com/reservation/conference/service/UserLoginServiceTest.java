@@ -24,14 +24,14 @@ class UserLoginServiceTest {
     void loginCheckSuccess() throws Exception {
         //given
         Long userId = 1L;
-        String userPw = "1234";
-        String chkSHA256Pw = SecurityUtil.changePw(userPw); // 직접 암호화
+        String userPassword = "1234";
+        String testEncryptPassword = SecurityUtil.encryptPassword(userPassword); // 직접 암호화
 
         //when
-        String userSHA256Pw = userLoginService.login(userId, userPw);
+        String userEncryptPassword = userLoginService.login(userId, userPassword);
 
         //then
-        Assertions.assertEquals(chkSHA256Pw, userSHA256Pw);
+        Assertions.assertEquals(testEncryptPassword, userEncryptPassword);
     }
 
     @Test
@@ -39,14 +39,14 @@ class UserLoginServiceTest {
     void loginCheckFail() throws Exception {
         //given
         Long userId = 1L;
-        String userPw = "1234";
-        String chkSHA256Pw = SecurityUtil.changePw("5678");  //틀린 비밀번호 암호화
+        String userPassword = "1234";
+        String testEncryptPassword = SecurityUtil.encryptPassword("5678");  //틀린 비밀번호 암호화
 
         //when
-        String userSHA256Pw = userLoginService.login(userId, userPw);
+        String userEncryptPassword = userLoginService.login(userId, userPassword);
 
         //then
-        Assertions.assertNotEquals(chkSHA256Pw, userSHA256Pw);
+        Assertions.assertNotEquals(testEncryptPassword, userEncryptPassword);
     }
 
 }

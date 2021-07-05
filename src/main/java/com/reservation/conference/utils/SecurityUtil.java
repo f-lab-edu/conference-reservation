@@ -8,7 +8,7 @@ public class SecurityUtil {
     /**
      * SHA-256 암호화
      * */
-    public static String changePw(String str) throws Exception {
+    public static String encryptPassword(String str) throws Exception {
 
         String shaPw = "";
 
@@ -16,7 +16,7 @@ public class SecurityUtil {
             //입력된 암호를 SHA256으로 암호화함.
             shaPw = getHex(genSHA256(str.getBytes()));
         } catch (Exception e) {
-            shaPw = "암호화에 에러가 발생하였습니다." + e;
+            shaPw = "";
         }
 
         return shaPw;
