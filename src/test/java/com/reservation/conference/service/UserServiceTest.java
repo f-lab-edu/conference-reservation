@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class UserJoinServiceTest {
+class UserServiceTest {
 
-    UserJoinService userJoinService = new UserJoinService();
+    UserService userService = new UserService();
 
     private static Long seq= 0L;
 
-    @DisplayName("성공적으로 회원가입이 된 경우")
+    @DisplayName("회원가입 성공")
     @Test
-    void signUpSuccess() throws Exception {
+    void joinSuccess() throws Exception {
         // given
         UserJoinDTO userJoinDTO = UserJoinDTO.builder()
                 .Id(++seq)
@@ -23,13 +23,28 @@ class UserJoinServiceTest {
                 .build();
 
         // when
-        boolean result = userJoinService.join(userJoinDTO);
+        boolean result = userService.join(userJoinDTO);
 
         // then
         assertThat(result).isEqualTo(true);
 
     }
 
+    @DisplayName("회원가입 실패")
+    @Test
+    void joinFail() throws Exception {
+        // given
+        UserJoinDTO userJoinDTO = UserJoinDTO.builder()
+                .Id(++seq)
+                .userName(null)
+                .password("hi")
+                .build();
 
+        // when
+        boolean result = userService.join(userJoinDTO);
+
+        // then
+        assertThat(result).isEqualTo(false);
+    }
 
 }
