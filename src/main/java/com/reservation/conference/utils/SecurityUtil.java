@@ -1,5 +1,7 @@
 package com.reservation.conference.utils;
 
+
+public class SecurityUtil {
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -58,5 +60,4 @@ public class SecurityUtil {
 
         return sb.toString();
     }
-
 }

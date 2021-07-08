@@ -1,12 +1,16 @@
 package com.reservation.conference.service;
 
+
 import com.reservation.conference.dto.UserLoginDto;
+import com.reservation.conference.dto.UserJoinDTO;
 import com.reservation.conference.utils.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.*;
 
 
 /**
@@ -23,6 +27,8 @@ class UserServiceTest {
      * */
     @Autowired
     UserService userService;
+
+    private static Long seq= 0L;
 
 
     @Test
@@ -53,6 +59,41 @@ class UserServiceTest {
 
         //then
         Assertions.assertNotEquals(testEncryptPassword, userLoginDto.getPassword());
+    }
+
+    @Test
+    @DisplayName("회원가입 성공")
+    void joinSuccess() throws Exception {
+        // given
+        UserJoinDTO userJoinDTO = UserJoinDTO.builder()
+                .Id(++seq)
+                .userName("heoella")
+                .password("hi")
+                .build();
+
+        // when
+        boolean result = userService.join(userJoinDTO);
+
+        // then
+        assertThat(result).isEqualTo(true);
+
+    }
+
+    @Test
+    @DisplayName("회원가입 실패")
+    void joinFail() throws Exception {
+        // given
+        UserJoinDTO userJoinDTO = UserJoinDTO.builder()
+                .Id(++seq)
+                .userName(null)
+                .password("hi")
+                .build();
+
+        // when
+        boolean result = userService.join(userJoinDTO);
+
+        // then
+        assertThat(result).isEqualTo(false);
     }
 
 }
