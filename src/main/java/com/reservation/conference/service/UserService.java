@@ -3,14 +3,16 @@ package com.reservation.conference.service;
 import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    @Autowired
-    UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    public UserService(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     /***
      * 유저 로그인 메서드
