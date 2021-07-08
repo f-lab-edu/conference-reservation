@@ -3,10 +3,10 @@ package com.reservation.conference.dto;
 import lombok.Getter;
 
 @Getter
-public class UserDto {
+public class UserLoginDto {
 
-    private Long id;
-    private String userName;
+    private String id;
     private String password;
+    private String userName;
 
 }
