@@ -9,7 +9,8 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
-    UserLoginDto findUserByIdAndPassword(String id, String password);
-
     void insertUser(UserJoinDto userJoinDto);
+
+    UserLoginDto findUserByIdAndPassword(@Param("id") String id, @Param("password") String password);
+
 }
