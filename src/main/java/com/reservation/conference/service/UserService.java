@@ -1,7 +1,6 @@
 package com.reservation.conference.service;
 
-
-import com.reservation.conference.dto.UserJoinDTO;
+import com.reservation.conference.dto.UserJoinDto;
 import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
@@ -28,17 +27,16 @@ public class UserService {
     }
 
     // 회원가입
-    public boolean join(UserJoinDTO userJoinDTO) throws Exception {
-        String encryptedPassword = SecurityUtil.encryptPassword(userJoinDTO.getPassword());
+    public boolean join(UserJoinDto userJoinDto) throws Exception {
+        String encryptedPassword = SecurityUtil.encryptPassword(userJoinDto.getPassword());
 
-        if(checkUserIdExist(userJoinDTO.getUserName())){
-            UserJoinDTO newUser = userJoinDTO.builder()
-                    .Id(userJoinDTO.getId())
-                    .userName(userJoinDTO.getUserName())
+        if(checkUserIdExist(userJoinDto.getId())){
+            UserJoinDto newUser = userJoinDto.builder()
+                    .id(userJoinDto.getId())
                     .password(encryptedPassword)
+                    .userName(userJoinDto.getUserName())
                     .build();
-
-//            userMapper.insertUser(newUser);
+            userMapper.insertUser(newUser);
             return true;
         }else{
             return false;
@@ -47,9 +45,9 @@ public class UserService {
 
     // 중복 회원 검증
     // 이지만 일단은 username이 null인지 아닌지 판단
-   public boolean checkUserIdExist(String userName){
+   public boolean checkUserIdExist(String id){
 
-        if(userName != null){
+        if(id != null){
             return true;
         }else{
             return false;
