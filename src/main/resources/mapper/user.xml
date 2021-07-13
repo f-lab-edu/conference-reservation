@@ -15,4 +15,9 @@
         VALUES(#{id}, #{password}, #{userName})
     </insert>
 
+    <select id="isExistId" parameterType="String" resultType="boolean">
+        SELECT EXISTS
+            (SELECT id FROM user WHERE id=#{id});
+    </select>
+
 </mapper>

@@ -59,11 +59,11 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공")
+    @DisplayName("id 중복 없음. 회원가입 성공")
     void joinSuccess() throws Exception {
         // given
         UserJoinDto userJoinDto = UserJoinDto.builder()
-                .id("testUser3")
+                .id("testUser1")
                 .password("1234")
                 .userName("heoella")
                 .build();
@@ -77,12 +77,12 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 실패")
+    @DisplayName("id 중복. 회원가입 실패")
     void joinFail() throws Exception {
         // given
         UserJoinDto userJoinDto = UserJoinDto.builder()
-                .id(null)
-                .password("12345")
+                .id("testUser2")
+                .password("1234")
                 .userName("heoella")
                 .build();
 

@@ -26,11 +26,12 @@ public class UserService {
         return userLoginDto;
     }
 
+
     // 회원가입
     public boolean join(UserJoinDto userJoinDto) throws Exception {
         String encryptedPassword = SecurityUtil.encryptPassword(userJoinDto.getPassword());
 
-        if(checkUserIdExist(userJoinDto.getId())){
+        if(!checkUserIdExist(userJoinDto.getId())){
             UserJoinDto newUser = userJoinDto.builder()
                     .id(userJoinDto.getId())
                     .password(encryptedPassword)
@@ -44,14 +45,14 @@ public class UserService {
     }
 
     // 중복 회원 검증
-    // 이지만 일단은 username이 null인지 아닌지 판단
-   public boolean checkUserIdExist(String id){
+    public boolean checkUserIdExist(String id){
+        boolean isExistId = userMapper.isExistId(id);
 
-        if(id != null){
+        if(isExistId){
             return true;
         }else{
             return false;
         }
     }
-  
+
 }

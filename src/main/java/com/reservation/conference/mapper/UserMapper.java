@@ -13,4 +13,5 @@ public interface UserMapper {
 
     UserLoginDto findUserByIdAndPassword(@Param("id") String id, @Param("password") String password);
 
+    boolean isExistId(String id);
 }
