@@ -1,16 +1,15 @@
 package com.reservation.conference.service;
 
 
-import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.dto.UserJoinDto;
-import com.reservation.conference.utils.SecurityUtil;
-import org.junit.jupiter.api.Assertions;
+import com.reservation.conference.dto.UserLoginDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -28,34 +27,26 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
-    @Test
-    @DisplayName("로그인 성공 테스트")
-    void loginCheckSuccess() throws Exception {
-        //given
-        String userId = "testUser1";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword(userPassword); // 직접 암호화
+    // Test Values
+    private String testUserId = "testId1";
+    private String testUserPassword = "12345";
+    private String testUserWrongPassword = "99999";
 
+    @Test
+    @DisplayName("DB 유저 로그인 성공")
+    void loginCheckSuccess() throws Exception {
         //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
+        UserLoginDto tsetUserInfo = userService.login(testUserId, testUserPassword);
 
         //then
-        Assertions.assertEquals(testEncryptPassword, userLoginDto.getPassword());
+        assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
     }
 
     @Test
-    @DisplayName("로그인 실패 테스트")
+    @DisplayName("DB 유저 로그인 실패_비밀번호 불일치")
     void loginCheckFail() throws Exception {
-        //given
-        String userId = "testUser2";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword("5678");  //틀린 비밀번호 암호화
 
-        //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
-
-        //then
-        Assertions.assertNotEquals(testEncryptPassword, userLoginDto.getPassword());
+        assertThat(userService.login(testUserId, testUserWrongPassword)).isNull();
     }
 
     @Test
