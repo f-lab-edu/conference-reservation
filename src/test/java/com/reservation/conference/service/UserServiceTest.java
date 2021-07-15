@@ -3,6 +3,7 @@ package com.reservation.conference.service;
 
 import com.reservation.conference.dto.UserJoinDto;
 import com.reservation.conference.dto.UserLoginDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,31 +27,26 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
+    // Test Values
+    private String testUserId = "testId1";
+    private String testUserPassword = "12345";
+    private String testUserWrongPassword = "99999";
 
     @Test
     @DisplayName("DB 유저 로그인 성공")
     void loginCheckSuccess() throws Exception {
-        //given
-        String testId = "testId1";
-        String testPassword = "12345";
-
         //when
-        UserLoginDto tsetUserInfo = userService.login(testId, testPassword);
+        UserLoginDto tsetUserInfo = userService.login(testUserId, testUserPassword);
 
         //then
-        assertThat("testId1").isEqualTo(tsetUserInfo.getId());
-
+        assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
     }
 
     @Test
     @DisplayName("DB 유저 로그인 실패_비밀번호 불일치")
     void loginCheckFail() throws Exception {
 
-        String userId = "testUser1";
-        String userWrongPassword = "99999";
-
-        assertThat(userService.login(userId, userWrongPassword)).isNull();
-
+        assertThat(userService.login(testUserId, testUserWrongPassword)).isNull();
     }
 
     @Test
