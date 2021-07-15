@@ -35,9 +35,7 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/users/login")
                 .params(map))       // 키=값의 파라미터 전달(여러 개는 params(), 한 개는 param())
-                .andExpect(status().isUnauthorized())   // 해당 테스트 데이터가 없으므로 401 반환
-                .andDo(print());    // 응답&요청 전체 메시지 확인
-
+                .andExpect(status().isUnauthorized());   // 해당 테스트 데이터가 없으므로 401 반환
     }
 
     @Test
@@ -48,8 +46,7 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/users/login")
                 .params(map))
-                .andExpect(status().isBadRequest())     //password 미입력으로 400 반환
-                .andDo(print());
+                .andExpect(status().isBadRequest());    //password 미입력으로 400 반환
     }
 
 }
