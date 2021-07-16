@@ -18,18 +18,20 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
-	implementation 'mysql:mysql-connector-java:5.1.46'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+    implementation 'mysql:mysql-connector-java:5.1.46'
     implementation 'junit:junit:4.13.1'
-    runtimeOnly    'com.h2database:h2'
+
 
 	compileOnly "org.projectlombok:lombok:${lombok_version}"
 	annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 
-	testCompileOnly "org.projectlombok:lombok:${lombok_version}"
-	testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly "org.projectlombok:lombok:${lombok_version}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.0'
+    testImplementation 'com.h2database:h2'
 }
 
 test {
