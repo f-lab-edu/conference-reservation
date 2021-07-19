@@ -1,10 +1,12 @@
 package com.reservation.conference.service;
 
 
+import com.reservation.conference.dto.User;
 import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.dto.UserJoinDto;
 import com.reservation.conference.utils.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,25 @@ class UserServiceTest {
      * */
     @Autowired
     UserService userService;
+
+    User testUser;
+
+    User encryptedUser;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        testUser = User.builder()
+                .id("testUser1")
+                .password("1234")
+                .userName("heoella")
+                .build();
+
+        encryptedUser = User.builder()
+                .id("testUser2")
+                .password(SecurityUtil.encryptPassword("1234"))
+                .userName("heoella")
+                .build();
+    }
 
     @Test
     @DisplayName("로그인 성공 테스트")
@@ -63,7 +84,7 @@ class UserServiceTest {
     void joinSuccess() throws Exception {
         // given
         UserJoinDto userJoinDto = UserJoinDto.builder()
-                .id("testUser1")
+                .id("testUser2")
                 .password("1234")
                 .userName("heoella")
                 .build();
@@ -81,7 +102,7 @@ class UserServiceTest {
     void joinFail() throws Exception {
         // given
         UserJoinDto userJoinDto = UserJoinDto.builder()
-                .id("testUser2")
+                .id("testUser1")
                 .password("1234")
                 .userName("heoella")
                 .build();
@@ -90,6 +111,23 @@ class UserServiceTest {
         boolean result = userService.join(userJoinDto);
 
         // then
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("비밀번호를 올바르게 입력한 경우 회원 탈퇴 성공")
+    void deleteUserSuccess() throws Exception {
+
+        boolean result = userService.deleteUser(encryptedUser, "1234");
+
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("틀린 비밀번호를 입력한 경우 회원 탈퇴 실패")
+    void deleteUserFail() throws Exception {
+        boolean result = userService.deleteUser(encryptedUser, "12345");
+
         assertThat(result).isEqualTo(false);
     }
 

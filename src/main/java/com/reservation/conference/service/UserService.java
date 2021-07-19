@@ -1,5 +1,6 @@
 package com.reservation.conference.service;
 
+import com.reservation.conference.dto.User;
 import com.reservation.conference.dto.UserJoinDto;
 import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.mapper.UserMapper;
@@ -32,12 +33,12 @@ public class UserService {
         String encryptedPassword = SecurityUtil.encryptPassword(userJoinDto.getPassword());
 
         if(!checkUserIdExist(userJoinDto.getId())){
-            UserJoinDto newUser = userJoinDto.builder()
+            UserJoinDto newUserJoinDto = userJoinDto.builder()
                     .id(userJoinDto.getId())
                     .password(encryptedPassword)
                     .userName(userJoinDto.getUserName())
                     .build();
-            userMapper.insertUser(newUser);
+            userMapper.insertUser(newUserJoinDto);
             return true;
         }else{
             return false;
@@ -54,5 +55,19 @@ public class UserService {
             return false;
         }
     }
+
+    // 회원 탈퇴
+    public boolean deleteUser(User currentUserJoinDto, String inputPassword ) throws Exception {
+        String encryptedInputPassword = SecurityUtil.encryptPassword(inputPassword);
+
+        if(!encryptedInputPassword.equals(currentUserJoinDto.getPassword())){
+            return false;
+        }else{
+            userMapper.deleteUser(currentUserJoinDto.getId());
+            return true;
+        }
+
+    }
+
 
 }
