@@ -1,9 +1,7 @@
 package com.reservation.conference.service;
 
 
-import com.reservation.conference.dto.User;
-import com.reservation.conference.dto.UserLoginDto;
-import com.reservation.conference.dto.UserJoinDto;
+import com.reservation.conference.dto.*;
 import com.reservation.conference.utils.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -131,4 +129,38 @@ class UserServiceTest {
         assertThat(result).isEqualTo(false);
     }
 
+    @Test
+    @DisplayName("회원 정보 수정 성공")
+    void updateUserInfoSuccess(){
+        // given
+        UserUpdateParam userUpdateParam = UserUpdateParam.builder()
+                .id(testUser.getId())
+                .userName("updateElla")
+                .build();
+
+        // when
+        userService.updateUserInfo(testUser, userUpdateParam);
+
+    }
+
+    // 회원 정보 수정 테스트가 실패할 경우
+    // 1. null인 필드가 있을 경우
+
+
+    @Test
+    @DisplayName("비밀번호 수정")
+    void updatePasswordSucceess() throws Exception {
+        // given
+        UserPasswordUpdateParam userPasswordUpdateParam = UserPasswordUpdateParam.builder()
+                .id(testUser.getId())
+                .currentPassword(testUser.getPassword())
+                .newPassword("123456")
+                .build();
+
+        // when
+        boolean result = userService.updatePassword(testUser, userPasswordUpdateParam);
+
+        // then
+        assertThat(result).isEqualTo(true);
+    }
 }

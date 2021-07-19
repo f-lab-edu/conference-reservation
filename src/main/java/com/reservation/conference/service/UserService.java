@@ -1,8 +1,6 @@
 package com.reservation.conference.service;
 
-import com.reservation.conference.dto.User;
-import com.reservation.conference.dto.UserJoinDto;
-import com.reservation.conference.dto.UserLoginDto;
+import com.reservation.conference.dto.*;
 import com.reservation.conference.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
 import org.springframework.stereotype.Service;
@@ -69,5 +67,39 @@ public class UserService {
 
     }
 
+    // 회원 정보 수정
+    public void updateUserInfo(User currentUser, UserUpdateParam userUpdateParam){
+
+        User updateUserInfo = User.builder()
+                .id(currentUser.getId())
+                .password(currentUser.getPassword())
+                .userName(userUpdateParam.getUserName())
+                .build();
+
+        userMapper.updateUserInfo(updateUserInfo);
+
+    }
+
+    // 유저 패스워드 수정
+    public boolean updatePassword(User currentUser, UserPasswordUpdateParam userPasswordUpdateParam) throws Exception {
+
+        // 현재 유저의 패스워드 == 정보 수정을 위해 입력 받은 패스워드
+        if(currentUser.getPassword().equals(userPasswordUpdateParam.getCurrentPassword())){
+
+            // newPassword 암호화
+            String encryptedNewPassword = SecurityUtil.encryptPassword(userPasswordUpdateParam.getNewPassword());
+
+            User updatePasswordUser = User.builder()
+                    .id(currentUser.getId())
+                    .password(encryptedNewPassword)
+                    .userName(currentUser.getUserName())
+                    .build();
+
+            userMapper.updatePassword(updatePasswordUser);
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }

@@ -25,5 +25,16 @@
         WHERE id = #{id}
     </delete>
 
+    <update id="updatePassword" parameterType="com.reservation.conference.dto.User">
+        UPDATE USER
+        SET password = #{password}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUserInfo" parameterType="com.reservation.conference.dto.User">
+        UPDATE USER
+        SET password = #{password}, userName = #{userName}
+        WHERE id = #{id}
+    </update>
 
 </mapper>

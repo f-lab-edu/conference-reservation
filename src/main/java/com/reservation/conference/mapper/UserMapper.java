@@ -1,8 +1,7 @@
 package com.reservation.conference.mapper;
 
 
-import com.reservation.conference.dto.UserJoinDto;
-import com.reservation.conference.dto.UserLoginDto;
+import com.reservation.conference.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,5 +14,11 @@ public interface UserMapper {
 
     boolean isExistId(String id);
 
-    void deleteUser(String userId);
+    void deleteUser(String id);
+
+    void updatePassword(User user);
+
+    void updateUserInfo(User user);
+
+
 }
