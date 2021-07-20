@@ -1,16 +1,15 @@
 package com.reservation.conference.service;
 
 
+import com.reservation.conference.dto.UserJoinDto;
 import com.reservation.conference.dto.UserLoginDto;
-import com.reservation.conference.dto.UserJoinDTO;
-import com.reservation.conference.utils.SecurityUtil;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -28,51 +27,40 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
-    private static Long seq= 0L;
-
+    // Test Values
+    private String testUserId = "testId1";
+    private String testUserPassword = "12345";
+    private String testUserWrongPassword = "99999";
 
     @Test
-    @DisplayName("로그인 성공 테스트")
+    @DisplayName("DB 유저 로그인 성공")
     void loginCheckSuccess() throws Exception {
-        //given
-        String userId = "testUser";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword(userPassword); // 직접 암호화
-
         //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
+        UserLoginDto tsetUserInfo = userService.login(testUserId, testUserPassword);
 
         //then
-        Assertions.assertEquals(testEncryptPassword, userLoginDto.getPassword());
+        assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
     }
 
     @Test
-    @DisplayName("로그인 실패 테스트")
+    @DisplayName("DB 유저 로그인 실패_비밀번호 불일치")
     void loginCheckFail() throws Exception {
-        //given
-        String userId = "testUser";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword("5678");  //틀린 비밀번호 암호화
 
-        //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
-
-        //then
-        Assertions.assertNotEquals(testEncryptPassword, userLoginDto.getPassword());
+        assertThat(userService.login(testUserId, testUserWrongPassword)).isNull();
     }
 
     @Test
     @DisplayName("회원가입 성공")
     void joinSuccess() throws Exception {
         // given
-        UserJoinDTO userJoinDTO = UserJoinDTO.builder()
-                .Id(++seq)
+        UserJoinDto userJoinDto = UserJoinDto.builder()
+                .id("testUser3")
+                .password("1234")
                 .userName("heoella")
-                .password("hi")
                 .build();
 
         // when
-        boolean result = userService.join(userJoinDTO);
+        boolean result = userService.join(userJoinDto);
 
         // then
         assertThat(result).isEqualTo(true);
@@ -83,14 +71,14 @@ class UserServiceTest {
     @DisplayName("회원가입 실패")
     void joinFail() throws Exception {
         // given
-        UserJoinDTO userJoinDTO = UserJoinDTO.builder()
-                .Id(++seq)
-                .userName(null)
-                .password("hi")
+        UserJoinDto userJoinDto = UserJoinDto.builder()
+                .id(null)
+                .password("12345")
+                .userName("heoella")
                 .build();
 
         // when
-        boolean result = userService.join(userJoinDTO);
+        boolean result = userService.join(userJoinDto);
 
         // then
         assertThat(result).isEqualTo(false);

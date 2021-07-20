@@ -9,4 +9,10 @@
          WHERE id = #{id}
            AND password = #{password}
     </select>
+
+    <insert id="insertUser" parameterType="com.reservation.conference.dto.UserJoinDto">
+        INSERT INTO USER(id, password, user_name)
+        VALUES(#{id}, #{password}, #{userName})
+    </insert>
+
 </mapper>
