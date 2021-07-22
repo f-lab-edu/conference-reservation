@@ -22,7 +22,7 @@
 <br>
 
 ## :cactus: Git Flow
-###브랜치 관리 전략
+### 브랜치 관리 전략
 
 Git Flow전략을 사용하여 브랜치를 관리합니다.
 
@@ -36,7 +36,7 @@ conference-reservation PR 내역 : https://github.com/f-lab-edu/conference-reser
 - release : 배포를 준비할 때 사용합니다.
 - hotfix : 배포를 진행한 후 발생한 버그를 수정해야 할 때 사용합니다.
 
-####참고 문헌
+#### 참고 문헌
 - 우아한 형제들 기술 블로그 : https://techblog.woowahan.com/2553/
 
 <br>
@@ -49,7 +49,7 @@ conference-reservation PR 내역 : https://github.com/f-lab-edu/conference-reser
 - 본문은 "어떻게"보다 "무엇을", "왜"를 설명한다.
 - 본문에 여러 줄의 메시지를 작성할 땐 들여쓰기로 구분한다.
 
-####타입
+#### 타입
 
 - feat : 기능(새로운 기능)
 - fix : 버그 ( 버그 수정)
@@ -60,7 +60,7 @@ conference-reservation PR 내역 : https://github.com/f-lab-edu/conference-reser
 - test : 테스트 ( 테스트 코드 추가, 수정, 삭제 등 비즈니스 로직에 영향이 없는 부분)
 - chore : 기타 변경 사항(빌드 스크립트 수정 등)
 
-####참고 문헌
+#### 참고 문헌
 
 - 좋은 커밋 메시지를 작성하기 위한 커밋 템플릿 만들어보기
 : https://junwoo45.github.io/2020-02-06-commit_template/
