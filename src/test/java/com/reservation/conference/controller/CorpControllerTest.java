@@ -1,12 +1,12 @@
 package com.reservation.conference.controller;
 
-
-import com.reservation.conference.service.UserService;
+import com.reservation.conference.service.CorpService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -15,38 +15,38 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
+@WebMvcTest(CorpController.class)
+class CorpControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
+    CorpService corpService;
 
 
     @Test
-    @DisplayName("로그인 API 진입 성공 테스트")
-    void loginSuccess() throws Exception {
+    @DisplayName("회원가입 API 진입 성공 테스트")
+    void joinApiSuccess() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("id", "test");
+        map.add("id", "testId");
         map.add("password", "1234");
 
-        mockMvc.perform(post("/users/login")
-                .params(map))       // 키=값의 파라미터 전달(여러 개는 params(), 한 개는 param())
-                .andExpect(status().isUnauthorized());  // 해당 테스트 데이터가 없으므로 401 반환
+        mockMvc.perform(post("/corp/join")
+                .params(map))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    @DisplayName("로그인 API 진입 실패 테스트")
-    void loginFail() throws Exception {
+    @DisplayName("회원가입 API 진입 실패 테스트 - 잘못된 API")
+    void joinApiFail() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("id", "test");
+        map.add("id", "testId");
+        map.add("password", "1234");
 
-        mockMvc.perform(post("/users/login")
+        mockMvc.perform(post("/corp/join/fail")
                 .params(map))
-                .andExpect(status().isBadRequest());    //password 미입력으로 400 반환
+                .andExpect(status().isNotFound());
     }
 
 }
-
