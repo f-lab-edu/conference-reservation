@@ -5,8 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserPasswordUpdateParam {
+public class UserPasswordUpdateDto {
+
     private String id;
     private String currentPassword;
     private String newPassword;
+
 }
+

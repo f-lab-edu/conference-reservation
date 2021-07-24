@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
-    void insertUser(UserJoinDto userJoinDto);
+    void insertUser(User user);
 
     UserLoginDto findUserByIdAndPassword(@Param("id") String id, @Param("password") String password);
 
@@ -16,9 +16,10 @@ public interface UserMapper {
 
     void deleteUser(String id);
 
-    void updatePassword(User user);
+    void updatePassword(UserPasswordUpdateDto userPasswordUpdateDto);
 
-    void updateUserInfo(User user);
+    void updateUserInfo(UserInfoUpdateDto userInfoUpdateDto);
 
+    String getPassword(String id);
 
 }

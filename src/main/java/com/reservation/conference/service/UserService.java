@@ -27,16 +27,15 @@ public class UserService {
 
 
     // 회원가입
-    public boolean join(UserJoinDto userJoinDto) throws Exception {
-        String encryptedPassword = SecurityUtil.encryptPassword(userJoinDto.getPassword());
+    public boolean join(User user) throws Exception {
+        String encryptedPassword = SecurityUtil.encryptPassword(user.getPassword());
 
-        if(!checkUserIdExist(userJoinDto.getId())){
-            UserJoinDto newUserJoinDto = userJoinDto.builder()
-                    .id(userJoinDto.getId())
+        if(!checkUserIdExist(user.getId())){
+            User newUser = user.builder()
+                    .id(user.getId())
                     .password(encryptedPassword)
-                    .userName(userJoinDto.getUserName())
                     .build();
-            userMapper.insertUser(newUserJoinDto);
+            userMapper.insertUser(newUser);
             return true;
         }else{
             return false;
@@ -55,44 +54,49 @@ public class UserService {
     }
 
     // 회원 탈퇴
-    public boolean deleteUser(User currentUserJoinDto, String inputPassword ) throws Exception {
-        String encryptedInputPassword = SecurityUtil.encryptPassword(inputPassword);
+    public boolean deleteUser(User currentUser, String inputPassword ) {
 
-        if(!encryptedInputPassword.equals(currentUserJoinDto.getPassword())){
+        if(!inputPassword.equals(currentUser.getPassword())){
             return false;
         }else{
-            userMapper.deleteUser(currentUserJoinDto.getId());
+            userMapper.deleteUser(currentUser.getId());
             return true;
         }
 
     }
 
     // 회원 정보 수정
-    public void updateUserInfo(User currentUser, UserUpdateParam userUpdateParam){
+    public boolean updateUserInfo(UserInfoUpdateDto currentUser){
 
-        User updateUserInfo = User.builder()
-                .id(currentUser.getId())
-                .password(currentUser.getPassword())
-                .userName(userUpdateParam.getUserName())
+        UserInfoUpdateDto updateUser = UserInfoUpdateDto.builder()
+                .userName(currentUser.getUserName())
+                .email(currentUser.getEmail())
+                .phoneNumber(currentUser.getPhoneNumber())
+                .organization(currentUser.getOrganization())
+                .gender(currentUser.getGender())
+                .dateBirth(currentUser.getDateBirth())
                 .build();
 
-        userMapper.updateUserInfo(updateUserInfo);
+        userMapper.updateUserInfo(updateUser);
 
+        return true;
+
+        // 입력되지 않는 속성이 있을 경우, return 값 false
     }
 
-    // 유저 패스워드 수정
-    public boolean updatePassword(User currentUser, UserPasswordUpdateParam userPasswordUpdateParam) throws Exception {
+    // 비밀번호 수정
+    public boolean updatePassword(UserPasswordUpdateDto userPasswordUpdateDto) throws Exception {
+
+        String currentPassword = userMapper.getPassword(userPasswordUpdateDto.getId());
 
         // 현재 유저의 패스워드 == 정보 수정을 위해 입력 받은 패스워드
-        if(currentUser.getPassword().equals(userPasswordUpdateParam.getCurrentPassword())){
+        if(currentPassword.equals(userPasswordUpdateDto.getCurrentPassword())){
 
             // newPassword 암호화
-            String encryptedNewPassword = SecurityUtil.encryptPassword(userPasswordUpdateParam.getNewPassword());
+            String encryptedNewPassword = SecurityUtil.encryptPassword(userPasswordUpdateDto.getNewPassword());
 
-            User updatePasswordUser = User.builder()
-                    .id(currentUser.getId())
-                    .password(encryptedNewPassword)
-                    .userName(currentUser.getUserName())
+            UserPasswordUpdateDto updatePasswordUser = UserPasswordUpdateDto.builder()
+                    .newPassword(encryptedNewPassword)
                     .build();
 
             userMapper.updatePassword(updatePasswordUser);

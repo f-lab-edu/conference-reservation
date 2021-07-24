@@ -4,7 +4,6 @@ package com.reservation.conference.service;
 import com.reservation.conference.dto.*;
 import com.reservation.conference.utils.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,25 +26,6 @@ class UserServiceTest {
      * */
     @Autowired
     UserService userService;
-
-    User testUser;
-
-    User encryptedUser;
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        testUser = User.builder()
-                .id("testUser1")
-                .password("1234")
-                .userName("heoella")
-                .build();
-
-        encryptedUser = User.builder()
-                .id("testUser2")
-                .password(SecurityUtil.encryptPassword("1234"))
-                .userName("heoella")
-                .build();
-    }
 
     @Test
     @DisplayName("로그인 성공 테스트")
@@ -81,14 +61,13 @@ class UserServiceTest {
     @DisplayName("id 중복 없음. 회원가입 성공")
     void joinSuccess() throws Exception {
         // given
-        UserJoinDto userJoinDto = UserJoinDto.builder()
-                .id("testUser2")
+        User testUser = User.builder()
+                .id("heoella")
                 .password("1234")
-                .userName("heoella")
                 .build();
 
         // when
-        boolean result = userService.join(userJoinDto);
+        boolean result = userService.join(testUser);
 
         // then
         assertThat(result).isEqualTo(true);
@@ -99,14 +78,13 @@ class UserServiceTest {
     @DisplayName("id 중복. 회원가입 실패")
     void joinFail() throws Exception {
         // given
-        UserJoinDto userJoinDto = UserJoinDto.builder()
-                .id("testUser1")
-                .password("1234")
-                .userName("heoella")
+        User testUser = User.builder()
+                .id("heo")
+                .password("password1234")
                 .build();
 
         // when
-        boolean result = userService.join(userJoinDto);
+        boolean result = userService.join(testUser);
 
         // then
         assertThat(result).isEqualTo(false);
@@ -115,16 +93,28 @@ class UserServiceTest {
     @Test
     @DisplayName("비밀번호를 올바르게 입력한 경우 회원 탈퇴 성공")
     void deleteUserSuccess() throws Exception {
+        // given
+        User testUser = User.builder()
+                .id("heo")
+                .password("password1234")
+                .build();
 
-        boolean result = userService.deleteUser(encryptedUser, "1234");
+
+        boolean result = userService.deleteUser(testUser, "password1234");
 
         assertThat(result).isEqualTo(true);
     }
 
     @Test
     @DisplayName("틀린 비밀번호를 입력한 경우 회원 탈퇴 실패")
-    void deleteUserFail() throws Exception {
-        boolean result = userService.deleteUser(encryptedUser, "12345");
+    void deleteUserFail()  {
+        // given
+        User testUser = User.builder()
+                .id("heo")
+                .password("password1234")
+                .build();
+
+        boolean result = userService.deleteUser(testUser, "1234");
 
         assertThat(result).isEqualTo(false);
     }
@@ -133,32 +123,37 @@ class UserServiceTest {
     @DisplayName("회원 정보 수정 성공")
     void updateUserInfoSuccess(){
         // given
-        UserUpdateParam userUpdateParam = UserUpdateParam.builder()
-                .id(testUser.getId())
+        UserInfoUpdateDto testUser = UserInfoUpdateDto.builder()
                 .userName("updateElla")
+                .email("ella@gmail.com")
+                .phoneNumber("010-0000-1111")
+                .organization("f-lab")
+                .gender("WOMAN")
+                .dateBirth("000101")
                 .build();
 
         // when
-        userService.updateUserInfo(testUser, userUpdateParam);
+        boolean result = userService.updateUserInfo(testUser);
+
+        // then
+        assertThat(result).isEqualTo(true);
 
     }
 
-    // 회원 정보 수정 테스트가 실패할 경우
-    // 1. null인 필드가 있을 경우
 
 
     @Test
     @DisplayName("비밀번호 수정")
     void updatePasswordSucceess() throws Exception {
         // given
-        UserPasswordUpdateParam userPasswordUpdateParam = UserPasswordUpdateParam.builder()
-                .id(testUser.getId())
-                .currentPassword(testUser.getPassword())
+        UserPasswordUpdateDto userPasswordUpdateDto = UserPasswordUpdateDto.builder()
+                .id("heo")
+                .currentPassword("password1234")
                 .newPassword("123456")
                 .build();
 
         // when
-        boolean result = userService.updatePassword(testUser, userPasswordUpdateParam);
+        boolean result = userService.updatePassword(userPasswordUpdateDto);
 
         // then
         assertThat(result).isEqualTo(true);

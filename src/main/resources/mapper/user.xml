@@ -10,9 +10,9 @@
            AND password = #{password}
     </select>
 
-    <insert id="insertUser" parameterType="com.reservation.conference.dto.UserJoinDto">
-        INSERT INTO USER(id, password, userName)
-        VALUES(#{id}, #{password}, #{userName})
+    <insert id="insertUser" parameterType="com.reservation.conference.dto.User">
+        INSERT INTO USER(id, password, user_name, email, phone_number, organization, gender, date_birth)
+        VALUES(#{id}, #{password}, #{userName}, #{email}, #{phoneNumber}, #{organization}, #{gender}, #{dateBirth})
     </insert>
 
     <select id="isExistId" parameterType="String" resultType="boolean">
@@ -27,14 +27,19 @@
 
     <update id="updatePassword" parameterType="com.reservation.conference.dto.User">
         UPDATE USER
-        SET password = #{password}
+        SET password = #{newPassword}
         WHERE id = #{id}
     </update>
 
     <update id="updateUserInfo" parameterType="com.reservation.conference.dto.User">
         UPDATE USER
-        SET password = #{password}, userName = #{userName}
+        SET user_name = #{userName}, email = #{email}, phone_number = #{phoneNumber}, organization = #{organization}, gender = #{gender}, date_birth = #{dateBirth}
         WHERE id = #{id}
     </update>
+
+    <select id="getPassword" parameterType="String" resultType="String">
+        SELECT password FROM USER
+        WHERE id = #{id}
+    </select>
 
 </mapper>
