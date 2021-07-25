@@ -12,7 +12,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -27,7 +26,7 @@ public class UserControllerTest {
 
 
     @Test
-    @DisplayName("로그인 컨트롤러 진입 테스트")
+    @DisplayName("로그인 API 진입 성공 테스트")
     void loginSuccess() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("id", "test");
@@ -35,11 +34,11 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/users/login")
                 .params(map))       // 키=값의 파라미터 전달(여러 개는 params(), 한 개는 param())
-                .andExpect(status().isUnauthorized());   // 해당 테스트 데이터가 없으므로 401 반환
+                .andExpect(status().isUnauthorized());  // 해당 테스트 데이터가 없으므로 401 반환
     }
 
     @Test
-    @DisplayName("로그인 진입 실패 테스트")
+    @DisplayName("로그인 API 진입 실패 테스트")
     void loginFail() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("id", "test");
