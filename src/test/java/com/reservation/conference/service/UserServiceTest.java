@@ -136,10 +136,10 @@ class UserServiceTest {
                 .build();
 
         // when
-        boolean result = userService.updateUserInfo(testUser);
+        int result = userService.updateUserInfo(testUser);
 
         // then
-        assertThat(result).isEqualTo(true);
+        assertThat(result).isEqualTo(1);
 
     }
 

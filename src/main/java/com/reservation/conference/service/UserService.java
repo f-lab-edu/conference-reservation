@@ -64,7 +64,7 @@ public class UserService {
     }
 
     // 회원 정보 수정
-    public boolean updateUserInfo(UserInfoUpdateDto currentUser){
+    public int updateUserInfo(UserInfoUpdateDto currentUser){
 
         UserInfoUpdateDto updateUser = UserInfoUpdateDto.builder()
                 .userName(currentUser.getUserName())
@@ -75,11 +75,8 @@ public class UserService {
                 .dateBirth(currentUser.getDateBirth())
                 .build();
 
-        userMapper.updateUserInfo(updateUser);
+        return userMapper.updateUserInfo(updateUser);
 
-        return true;
-
-        // 입력되지 않는 속성이 있을 경우, return 값 false
     }
 
     // 비밀번호 수정
