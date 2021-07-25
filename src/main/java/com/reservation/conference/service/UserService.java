@@ -3,16 +3,14 @@ package com.reservation.conference.service;
 import com.reservation.conference.dto.*;
 import com.reservation.conference.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserMapper userMapper;
-
-    public UserService(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
     /***
      * 유저 로그인 메서드

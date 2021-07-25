@@ -1,9 +1,11 @@
 package com.reservation.conference.service;
 
 
-import com.reservation.conference.dto.*;
+import com.reservation.conference.dto.User;
+import com.reservation.conference.dto.UserInfoUpdateDto;
+import com.reservation.conference.dto.UserLoginDto;
+import com.reservation.conference.dto.UserPasswordUpdateDto;
 import com.reservation.conference.utils.SecurityUtil;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,13 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
+    // Test Values
+    private String testUserId = "testId1";
+    private String testUserPassword = "12345";
+    private String testUserWrongPassword = "99999";
+
     @Test
-    @DisplayName("로그인 성공 테스트")
+    @DisplayName("DB 유저 로그인 성공")
     void loginCheckSuccess() throws Exception {
         //given
         String userId = "testUser1";
@@ -36,29 +43,25 @@ class UserServiceTest {
         String testEncryptPassword = SecurityUtil.encryptPassword(userPassword); // 직접 암호화
 
         //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
+        UserLoginDto tsetUserInfo = userService.login(testUserId, testUserPassword);
 
         //then
-        Assertions.assertEquals(testEncryptPassword, userLoginDto.getPassword());
+        assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
     }
 
     @Test
-    @DisplayName("로그인 실패 테스트")
+    @DisplayName("DB 유저 로그인 실패_비밀번호 불일치")
     void loginCheckFail() throws Exception {
         //given
         String userId = "testUser2";
         String userPassword = "1234";
         String testEncryptPassword = SecurityUtil.encryptPassword("5678");  //틀린 비밀번호 암호화
 
-        //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
-
-        //then
-        Assertions.assertNotEquals(testEncryptPassword, userLoginDto.getPassword());
+        assertThat(userService.login(testUserId, testUserWrongPassword)).isNull();
     }
 
     @Test
-    @DisplayName("id 중복 없음. 회원가입 성공")
+    @DisplayName("DB 회원가입 성공_아이디 중복 없음")
     void joinSuccess() throws Exception {
         // given
         User testUser = User.builder()
@@ -75,7 +78,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("id 중복. 회원가입 실패")
+    @DisplayName("DB 회원가입 실패_아이디 중복")
     void joinFail() throws Exception {
         // given
         User testUser = User.builder()
@@ -91,7 +94,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("비밀번호를 올바르게 입력한 경우 회원 탈퇴 성공")
+    @DisplayName("DB 회원탈퇴 성공_비밀번호 일치")
     void deleteUserSuccess() throws Exception {
         // given
         User testUser = User.builder()
@@ -106,7 +109,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("틀린 비밀번호를 입력한 경우 회원 탈퇴 실패")
+    @DisplayName("DB 회원탈퇴 실패_비밀번호 불일치")
     void deleteUserFail()  {
         // given
         User testUser = User.builder()
@@ -120,7 +123,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 정보 수정 성공")
+    @DisplayName("DB 회원 정보수정 성공_모든 필드에 값이 입력 되었을 경우")
     void updateUserInfoSuccess(){
         // given
         UserInfoUpdateDto testUser = UserInfoUpdateDto.builder()
@@ -143,7 +146,7 @@ class UserServiceTest {
 
 
     @Test
-    @DisplayName("비밀번호 수정")
+    @DisplayName("DB 비밀번호 수정 성공")
     void updatePasswordSucceess() throws Exception {
         // given
         UserPasswordUpdateDto userPasswordUpdateDto = UserPasswordUpdateDto.builder()

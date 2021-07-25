@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.reservation.conference.mapper.CorpMapper">
+    <select id="findById" resultType="com.reservation.conference.dto.CorpJoinDto">
+        SELECT *
+          FROM CORP
+         WHERE id = #{id}
+    </select>
+
+    <insert id="insertCorp" parameterType="com.reservation.conference.dto.CorpJoinDto">
+        INSERT INTO CORP
+        (
+            id,
+            password,
+            corp_name,
+            corp_email,
+            corp_phone_number,
+            corp_reg_number
+        )
+        VALUES
+        (
+            #{id},
+            #{password},
+            #{corpName},
+            #{corpEmail},
+            #{corpPhoneNumber},
+            #{corpRegNumber}
+        )
+    </insert>
+
+</mapper>
