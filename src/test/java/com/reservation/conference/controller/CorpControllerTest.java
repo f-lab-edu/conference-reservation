@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -35,18 +34,6 @@ class CorpControllerTest {
         mockMvc.perform(post("/corp/join")
                 .params(map))
                 .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("회원가입 API 진입 실패 테스트 - 잘못된 API")
-    void joinApiFail() throws Exception {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("id", "testId");
-        map.add("password", "1234");
-
-        mockMvc.perform(post("/corp/join/fail")
-                .params(map))
-                .andExpect(status().isNotFound());
     }
 
 }
