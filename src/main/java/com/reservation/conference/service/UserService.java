@@ -32,6 +32,12 @@ public class UserService {
             User newUser = user.builder()
                     .id(user.getId())
                     .password(encryptedPassword)
+                    .userName(user.getUserName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .organization(user.getOrganization())
+                    .gender(user.getGender())
+                    .dateBirth(user.getDateBirth())
                     .build();
             userMapper.insertUser(newUser);
             return true;
@@ -64,9 +70,10 @@ public class UserService {
     }
 
     // 회원 정보 수정
-    public int updateUserInfo(UserInfoUpdateDto currentUser){
+    public int updateUserInfo(String id, UserInfoUpdateDto currentUser){
 
         UserInfoUpdateDto updateUser = UserInfoUpdateDto.builder()
+                .id(id)
                 .userName(currentUser.getUserName())
                 .email(currentUser.getEmail())
                 .phoneNumber(currentUser.getPhoneNumber())
@@ -80,9 +87,9 @@ public class UserService {
     }
 
     // 비밀번호 수정
-    public boolean updatePassword(UserPasswordUpdateDto userPasswordUpdateDto) throws Exception {
+    public boolean updatePassword(String id, UserPasswordUpdateDto userPasswordUpdateDto) throws Exception {
 
-        String currentPassword = userMapper.getPassword(userPasswordUpdateDto.getId());
+        String currentPassword = userMapper.getPassword(id);
 
         // 현재 유저의 패스워드 == 정보 수정을 위해 입력 받은 패스워드
         if(currentPassword.equals(userPasswordUpdateDto.getCurrentPassword())){

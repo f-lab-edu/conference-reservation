@@ -66,7 +66,13 @@ class UserServiceTest {
         // given
         User testUser = User.builder()
                 .id("heoella")
-                .password("1234")
+                .password("password1234")
+                .userName("heo-ella")
+                .email("heo@f-lab.com")
+                .phoneNumber("010-1111-1234")
+                .organization( "f-lab")
+                .gender("Woman")
+                .dateBirth("1995-03-07")
                 .build();
 
         // when
@@ -136,7 +142,7 @@ class UserServiceTest {
                 .build();
 
         // when
-        int result = userService.updateUserInfo(testUser);
+        int result = userService.updateUserInfo("heo", testUser);
 
         // then
         assertThat(result).isEqualTo(1);
@@ -156,7 +162,7 @@ class UserServiceTest {
                 .build();
 
         // when
-        boolean result = userService.updatePassword(userPasswordUpdateDto);
+        boolean result = userService.updatePassword("heo", userPasswordUpdateDto);
 
         // then
         assertThat(result).isEqualTo(true);
