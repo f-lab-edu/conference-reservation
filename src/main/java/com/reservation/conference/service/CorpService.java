@@ -16,7 +16,7 @@ public class CorpService {
     public boolean join(CorpJoinDto corpJoinDto) throws Exception {
         //아이디 중복 체크
         boolean checkResult = checkCorpIdExist(corpJoinDto.getId());
-        if(checkResult) {
+        if(!checkResult) {
             return false;
         }
 
