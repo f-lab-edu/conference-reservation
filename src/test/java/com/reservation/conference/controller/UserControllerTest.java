@@ -1,16 +1,20 @@
 package com.reservation.conference.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,29 +28,35 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    MockHttpSession httpSession = new MockHttpSession();
+
 
     @Test
-    @DisplayName("로그인 API 진입 성공 테스트")
+    @DisplayName("로그인 API 성공 테스트")
     void loginSuccess() throws Exception {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("id", "test");
-        map.add("password", "1234");
+        UserLoginDto userLoginInfo = new UserLoginDto();
+        userLoginInfo.setId("testId1");
 
         mockMvc.perform(post("/users/login")
-                .params(map))       // 키=값의 파라미터 전달(여러 개는 params(), 한 개는 param())
-                .andExpect(status().isUnauthorized());  // 해당 테스트 데이터가 없으므로 401 반환
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userLoginInfo))
+                .session(httpSession))
+                .andExpect(status().isUnauthorized());  //실제 데이터가 없으므로 401 반환.
     }
 
     @Test
-    @DisplayName("로그인 API 진입 실패 테스트")
-    void loginFail() throws Exception {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("id", "test");
+    @DisplayName("로그아웃 성공 테스트 - 200(HttpStatus) 반환")
+    void logoutSuccess() throws Exception {
 
-        mockMvc.perform(post("/users/login")
-                .params(map))
-                .andExpect(status().isBadRequest());    //password 미입력으로 400 반환
+        mockMvc.perform(get("/users/logout")
+                .session(httpSession))
+                .andExpect(status().isOk());
+
+        //"user" 세션이 아직 존재하는지 확인
+        Assertions.assertNull(httpSession.getAttribute("user"));
     }
 
 }
-
