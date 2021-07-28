@@ -16,13 +16,14 @@ public class CorpService {
     public boolean join(CorpJoinDto corpJoinDto) throws Exception {
         //아이디 중복 체크
         boolean checkResult = checkCorpIdExist(corpJoinDto.getId());
-        if(checkResult) {
+        if(!checkResult) {
             return false;
-        }else {
-            String encryptPassword = SecurityUtil.encryptPassword(corpJoinDto.getPassword());
-            corpJoinDto.setPassword(encryptPassword);
-            corpMapper.insertCorp(corpJoinDto);
         }
+
+        String encryptPassword = SecurityUtil.encryptPassword(corpJoinDto.getPassword());
+        corpJoinDto.setPassword(encryptPassword);
+        corpMapper.insertCorp(corpJoinDto);
+
         return true;
     }
 
@@ -32,9 +33,7 @@ public class CorpService {
     public boolean checkCorpIdExist(String id) {
         CorpJoinDto resultDto = corpMapper.findById(id);
 
-        if(resultDto == null) {
-            return false;
-        }
-        return true;
+        return resultDto == null;
     }
+
 }
