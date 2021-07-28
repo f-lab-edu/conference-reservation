@@ -1,7 +1,6 @@
 package com.reservation.conference.service;
 
-import com.reservation.conference.dto.UserJoinDto;
-import com.reservation.conference.dto.UserLoginDto;
+import com.reservation.conference.dto.*;
 import com.reservation.conference.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +23,21 @@ public class UserService {
         return userLoginDto;
     }
 
-    // 회원가입
-    public boolean join(UserJoinDto userJoinDto) throws Exception {
-        String encryptedPassword = SecurityUtil.encryptPassword(userJoinDto.getPassword());
 
-        if(checkUserIdExist(userJoinDto.getId())){
-            UserJoinDto newUser = userJoinDto.builder()
-                    .id(userJoinDto.getId())
+    // 회원가입
+    public boolean join(User user) throws Exception {
+        String encryptedPassword = SecurityUtil.encryptPassword(user.getPassword());
+
+        if(!checkUserIdExist(user.getId())){
+            User newUser = user.builder()
+                    .id(user.getId())
                     .password(encryptedPassword)
-                    .userName(userJoinDto.getUserName())
+                    .userName(user.getUserName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .organization(user.getOrganization())
+                    .gender(user.getGender())
+                    .dateBirth(user.getDateBirth())
                     .build();
             userMapper.insertUser(newUser);
             return true;
@@ -42,14 +47,65 @@ public class UserService {
     }
 
     // 중복 회원 검증
-    // 이지만 일단은 username이 null인지 아닌지 판단
-   public boolean checkUserIdExist(String id){
+    public boolean checkUserIdExist(String id){
+        boolean isExistId = userMapper.isExistId(id);
 
-        if(id != null){
+        if(isExistId){
             return true;
         }else{
             return false;
         }
     }
-  
+
+    // 회원 탈퇴
+    public boolean deleteUser(User currentUser, String inputPassword ) {
+
+        if(!inputPassword.equals(currentUser.getPassword())){
+            return false;
+        }else{
+            userMapper.deleteUser(currentUser.getId());
+            return true;
+        }
+
+    }
+
+    // 회원 정보 수정
+    public int updateUserInfo(String id, UserInfoUpdateDto currentUser){
+
+        UserInfoUpdateDto updateUser = UserInfoUpdateDto.builder()
+                .id(id)
+                .userName(currentUser.getUserName())
+                .email(currentUser.getEmail())
+                .phoneNumber(currentUser.getPhoneNumber())
+                .organization(currentUser.getOrganization())
+                .gender(currentUser.getGender())
+                .dateBirth(currentUser.getDateBirth())
+                .build();
+
+        return userMapper.updateUserInfo(updateUser);
+
+    }
+
+    // 비밀번호 수정
+    public boolean updatePassword(String id, UserPasswordUpdateDto userPasswordUpdateDto) throws Exception {
+
+        String currentPassword = userMapper.getPassword(id);
+
+        // 현재 유저의 패스워드 == 정보 수정을 위해 입력 받은 패스워드
+        if(currentPassword.equals(userPasswordUpdateDto.getCurrentPassword())){
+
+            // newPassword 암호화
+            String encryptedNewPassword = SecurityUtil.encryptPassword(userPasswordUpdateDto.getNewPassword());
+
+            UserPasswordUpdateDto updatePasswordUser = UserPasswordUpdateDto.builder()
+                    .newPassword(encryptedNewPassword)
+                    .build();
+
+            userMapper.updatePassword(updatePasswordUser);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
