@@ -1,6 +1,7 @@
 package com.reservation.conference.service;
 
 import com.reservation.conference.dto.CorpJoinDto;
+import com.reservation.conference.mapper.CorpMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,20 @@ class CorpServiceTest {
         corpJoinTest.setId(null);
 
         assertThrows(RuntimeException.class, () -> corpService.join(corpJoinTest));
+    }
+
+    @Test
+    @DisplayName("기업 회원 탈퇴 성공")
+    void corpDeleteMemberSuccess() throws Exception {
+
+        assertThat(corpService.deleteCorp(corpJoinTest.getId(), corpJoinTest.getPassword())).isTrue();
+    }
+
+    @Test
+    @DisplayName("기업 회원 탈퇴 실패 - 잘못된 비밀번호 입력")
+    void corpDeleteMemberFail() throws Exception {
+
+        assertThat(corpService.deleteCorp(corpJoinTest.getId(), "wrongPassword123")).isFalse();
     }
 
 }
