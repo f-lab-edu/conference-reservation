@@ -9,6 +9,13 @@
          WHERE id = #{id}
     </select>
 
+    <select id="findCorpByIdAndPassword" resultType="com.reservation.conference.dto.CorpJoinDto">
+        SELECT *
+          FROM CORP
+         WHERE id = #{id}
+           AND password = #{password}
+    </select>
+
     <insert id="insertCorp" parameterType="com.reservation.conference.dto.CorpJoinDto">
         INSERT INTO CORP
         (
@@ -29,5 +36,10 @@
             #{corpRegNumber}
         )
     </insert>
+
+    <delete id="deleteCorp">
+        DELETE FROM CORP
+         WHERE id = #{id}
+    </delete>
 
 </mapper>
