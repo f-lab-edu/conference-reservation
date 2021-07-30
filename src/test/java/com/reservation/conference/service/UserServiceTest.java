@@ -116,7 +116,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("DB 회원탈퇴 실패_비밀번호 불일치")
-    void deleteUserFail()  {
+    void deleteUserFail() throws Exception {
         // given
         User testUser = User.builder()
                 .id("heo")

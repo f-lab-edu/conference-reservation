@@ -1,6 +1,10 @@
 package com.reservation.conference.service;
 
 import com.reservation.conference.dto.*;
+import com.reservation.conference.exception.DeleteErrorException;
+import com.reservation.conference.exception.DuplicationIdException;
+import com.reservation.conference.exception.InsertErrorException;
+import com.reservation.conference.exception.WrongPasswordException;
 import com.reservation.conference.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,47 +30,56 @@ public class UserService {
 
     // 회원가입
     public boolean join(User user) throws Exception {
+
+        boolean checkId = checkUserIdExist(user.getId());
+        if(checkId) {
+            throw new DuplicationIdException("중복된 아이디 입니다.");
+        }
+
         String encryptedPassword = SecurityUtil.encryptPassword(user.getPassword());
 
-        if(!checkUserIdExist(user.getId())){
-            User newUser = user.builder()
-                    .id(user.getId())
-                    .password(encryptedPassword)
-                    .userName(user.getUserName())
-                    .email(user.getEmail())
-                    .phoneNumber(user.getPhoneNumber())
-                    .organization(user.getOrganization())
-                    .gender(user.getGender())
-                    .dateBirth(user.getDateBirth())
-                    .build();
-            userMapper.insertUser(newUser);
-            return true;
-        }else{
-            return false;
+        User newUser = user.builder()
+                .id(user.getId())
+                .password(encryptedPassword)
+                .userName(user.getUserName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .organization(user.getOrganization())
+                .gender(user.getGender())
+                .dateBirth(user.getDateBirth())
+                .build();
+
+        int insertResult = userMapper.insertUser(newUser);
+        if(insertResult != 1) {
+            throw new InsertErrorException("insert하는 도중에 에러가 발생하였습니다.");
         }
+
+        return true;
     }
 
     // 중복 회원 검증
-    public boolean checkUserIdExist(String id){
-        boolean isExistId = userMapper.isExistId(id);
+    public boolean checkUserIdExist(String id) {
 
-        if(isExistId){
-            return true;
-        }else{
-            return false;
-        }
+        return userMapper.isExistId(id);
     }
 
     // 회원 탈퇴
-    public boolean deleteUser(User currentUser, String inputPassword ) {
+    public boolean deleteUser(User currentUser, String inputPassword) throws Exception {
+        //입력한 비밀번호 확인
+        String encryptPassword = SecurityUtil.encryptPassword(inputPassword);
+        String getPassword = userMapper.getPassword(currentUser.getId());
 
-        if(!inputPassword.equals(currentUser.getPassword())){
-            return false;
-        }else{
-            userMapper.deleteUser(currentUser.getId());
-            return true;
+        int deleteResult = 0;
+        if(!encryptPassword.equals(getPassword)) {  // 틀린 비밀번호 입력
+            throw new WrongPasswordException("잘못된 비밀번호 입니다.");
         }
 
+        deleteResult = userMapper.deleteUser(currentUser.getId());
+        if(deleteResult != 1) {
+            throw new DeleteErrorException("Delete하는 도중에 에러가 발생하였습니다.");
+        }
+
+        return true;
     }
 
     // 회원 정보 수정
