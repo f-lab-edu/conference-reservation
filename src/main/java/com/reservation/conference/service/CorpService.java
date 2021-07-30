@@ -22,9 +22,8 @@ public class CorpService {
 
         String encryptPassword = SecurityUtil.encryptPassword(corpJoinDto.getPassword());
         corpJoinDto.setPassword(encryptPassword);
-        corpMapper.insertCorp(corpJoinDto);
 
-        return true;
+        return corpMapper.insertCorp(corpJoinDto);
     }
 
     /**
@@ -34,6 +33,20 @@ public class CorpService {
         CorpJoinDto resultDto = corpMapper.findById(id);
 
         return resultDto == null;
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    public boolean deleteCorp(String id, String password) throws Exception {
+        //입력한 비밀번호 확인
+        String encryptPassword = SecurityUtil.encryptPassword(password);
+        CorpJoinDto corpInfo = corpMapper.findCorpByIdAndPassword(id, encryptPassword);
+        if(corpInfo == null) {
+            return false;
+        }
+
+        return corpMapper.deleteCorp(corpInfo.getId());
     }
 
 }
