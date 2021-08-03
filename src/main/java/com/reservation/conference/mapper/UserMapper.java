@@ -10,7 +10,7 @@ public interface UserMapper {
 
     int insertUser(User user);
 
-    UserLoginDto findUserByIdAndPassword(@Param("id") String id, @Param("password") String password);
+    User findUserByIdAndPassword(@Param("id") String id, @Param("password") String password);
 
     boolean isExistId(String id);
 
@@ -18,7 +18,7 @@ public interface UserMapper {
 
     int updatePassword(UserPasswordUpdateDto userPasswordUpdateDto);
 
-    int updateUserInfo(UserInfoUpdateDto userInfoUpdateDto);
+    int updateUserInfo(User userUpdateInfo);
 
     String getPassword(String id);
 
