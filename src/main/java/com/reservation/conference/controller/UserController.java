@@ -3,6 +3,7 @@ package com.reservation.conference.controller;
 import com.reservation.conference.domain.LoginResponse;
 import com.reservation.conference.domain.enums.LoginStatus;
 import com.reservation.conference.dto.User;
+import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.dto.UserPasswordUpdateDto;
 import com.reservation.conference.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +29,11 @@ public class UserController {
      * 유저 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestParam("id")String id, @RequestParam("password")String password, HttpSession session) throws Exception {
+    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginDto userLoginInfo, HttpSession session) throws Exception {
 
         LoginResponse loginResponse;
         ResponseEntity<LoginResponse> responseEntity;
-        User userInfo = userService.login(id, password);
+        User userInfo = userService.login(userLoginInfo.getId(), userLoginInfo.getPassword());
 
         if(userInfo == null) {
             loginResponse = new LoginResponse(LoginStatus.FAIL);
