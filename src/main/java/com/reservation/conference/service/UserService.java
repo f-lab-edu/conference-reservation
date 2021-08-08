@@ -1,7 +1,6 @@
 package com.reservation.conference.service;
 
 
-import com.reservation.conference.dto.UserJoinDTO;
 import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
@@ -32,7 +31,7 @@ public class UserService {
         String encryptedPassword = SecurityUtil.encryptPassword(userJoinDTO.getPassword());
 
         if(checkUserIdExist(userJoinDTO.getUserName())){
-            UserJoinDTO newUser = userJoinDTO.builder()
+            UserJoinDTO newUser = builder()
                     .Id(userJoinDTO.getId())
                     .userName(userJoinDTO.getUserName())
                     .password(encryptedPassword)

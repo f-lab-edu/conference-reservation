@@ -3,10 +3,63 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.reservation.conference.mapper.UserMapper">
-    <select id="findUserByIdAndPassword" resultType="com.reservation.conference.dto.UserLoginDto">
+    <select id="findUserByIdAndPassword" resultType="com.reservation.conference.dto.User">
         SELECT *
           FROM USER
          WHERE id = #{id}
            AND password = #{password}
     </select>
+
+    <insert id="insertUser" parameterType="com.reservation.conference.dto.User">
+        INSERT INTO USER
+        (
+          id
+        , password
+        , user_name
+        , user_email
+        , user_phone_number
+        , user_organization
+        , user_gender
+        , user_date_birth
+        )
+        VALUES
+        (
+            #{id}
+          , #{password}
+          , #{userName}
+          , #{userEmail}
+          , #{userPhoneNumber}
+          , #{userOrganization}
+          , #{userGender}
+          , #{userDateBirth}
+        )
+    </insert>
+
+    <select id="isExistId" parameterType="String" resultType="boolean">
+        SELECT EXISTS
+            (SELECT id FROM USER WHERE id=#{id});
+    </select>
+
+    <delete id="deleteUser" parameterType="String">
+        DELETE FROM USER
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updatePassword" parameterType="com.reservation.conference.dto.User">
+        UPDATE USER
+        SET password = #{newPassword}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUserInfo" parameterType="com.reservation.conference.dto.User">
+        UPDATE USER
+        SET user_name = #{userName}, email = #{email}, phone_number = #{phoneNumber}, organization = #{organization}, gender = #{gender}, date_birth = #{dateBirth}
+        WHERE id = #{id}
+    </update>
+
+    <select id="getPassword" parameterType="String" resultType="String">
+        SELECT password FROM USER
+        WHERE id = #{id}
+    </select>
+
 </mapper>

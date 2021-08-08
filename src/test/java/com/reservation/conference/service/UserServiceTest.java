@@ -1,16 +1,16 @@
 package com.reservation.conference.service;
 
 
-import com.reservation.conference.dto.UserLoginDto;
-import com.reservation.conference.dto.UserJoinDTO;
-import com.reservation.conference.utils.SecurityUtil;
-import org.junit.jupiter.api.Assertions;
+import com.reservation.conference.dto.User;
+import com.reservation.conference.dto.UserPasswordUpdateDto;
+import com.reservation.conference.exception.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -28,72 +28,138 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
-    private static Long seq= 0L;
-
+    /**
+     * 유저 테스트 변수
+     */
+    private String testUserId = "testId1";
+    private String testUserPassword = "12345";
+    private String testUserWrongPassword = "99999";
 
     @Test
-    @DisplayName("로그인 성공 테스트")
+    @DisplayName("DB 유저 로그인 성공")
     void loginCheckSuccess() throws Exception {
-        //given
-        String userId = "testUser";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword(userPassword); // 직접 암호화
 
-        //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
+        User tsetUserInfo = userService.login(testUserId, testUserPassword);
 
-        //then
-        Assertions.assertEquals(testEncryptPassword, userLoginDto.getPassword());
+        assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
     }
 
     @Test
-    @DisplayName("로그인 실패 테스트")
+    @DisplayName("DB 유저 로그인 실패_비밀번호 불일치")
     void loginCheckFail() throws Exception {
-        //given
-        String userId = "testUser";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword("5678");  //틀린 비밀번호 암호화
 
-        //when
-        UserLoginDto userLoginDto = userService.login(userId, userPassword);
-
-        //then
-        Assertions.assertNotEquals(testEncryptPassword, userLoginDto.getPassword());
+        //"해당 유저의 로그인 정보가 존재하지 않습니다."
+        assertThrows(UserNotFoundException.class, () -> userService.login(testUserId, testUserWrongPassword));
     }
 
     @Test
-    @DisplayName("회원가입 성공")
+    @DisplayName("DB 회원가입 성공_아이디 중복 없음")
     void joinSuccess() throws Exception {
         // given
-        UserJoinDTO userJoinDTO = UserJoinDTO.builder()
-                .Id(++seq)
-                .userName("heoella")
-                .password("hi")
+        User testUser = User.builder()
+                .id("heoella")
+                .password("password1234")
+                .userName("heo-ella")
+                .userEmail("heo@f-lab.com")
+                .userPhoneNumber("010-1111-1234")
+                .userOrganization( "f-lab")
+                .userGender("Woman")
+                .userDateBirth("1995-03-07")
                 .build();
 
         // when
-        boolean result = userService.join(userJoinDTO);
+        boolean result = userService.join(testUser);
 
         // then
         assertThat(result).isEqualTo(true);
-
     }
 
     @Test
-    @DisplayName("회원가입 실패")
+    @DisplayName("DB 회원가입 실패_아이디 중복")
     void joinFail() throws Exception {
         // given
-        UserJoinDTO userJoinDTO = UserJoinDTO.builder()
-                .Id(++seq)
-                .userName(null)
-                .password("hi")
+        User testUser = User.builder()
+                .id("heo")
+                .password("password1234")
+                .userName("heo-ella")
+                .userEmail("heo@f-lab.com")
+                .userPhoneNumber("010-1111-1234")
+                .userOrganization( "f-lab")
+                .userGender("Woman")
+                .userDateBirth("1995-03-07")
                 .build();
 
         // when
-        boolean result = userService.join(userJoinDTO);
+        boolean result = userService.join(testUser);
 
         // then
         assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("DB 회원탈퇴 성공_비밀번호 일치")
+    void deleteUserSuccess() throws Exception {
+        // given
+        User testUser = User.builder()
+                .id("heo")
+                .password("password1234")
+                .build();
+
+
+        boolean result = userService.deleteUser(testUser, "password1234");
+
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("DB 회원탈퇴 실패_비밀번호 불일치")
+    void deleteUserFail() throws Exception {
+        // given
+        User testUser = User.builder()
+                .id("heo")
+                .password("password1234")
+                .build();
+
+        boolean result = userService.deleteUser(testUser, "wrongPassword");
+
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("DB 회원 정보수정 성공_모든 필드에 값이 입력 되었을 경우")
+    void updateUserInfoSuccess(){
+        // given
+        User testUser = User.builder()
+                .userName("updateElla")
+                .userEmail("ella@gmail.com")
+                .userPhoneNumber("010-0000-1111")
+                .userOrganization("f-lab")
+                .userGender("WOMAN")
+                .userDateBirth("000101")
+                .build();
+
+        // when
+        int result = userService.updateUserInfo("heo", testUser);
+
+        // then
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("DB 비밀번호 수정 성공")
+    void updatePasswordSucceess() throws Exception {
+        // given
+        UserPasswordUpdateDto userPasswordUpdateDto = UserPasswordUpdateDto.builder()
+                .id("heo")
+                .currentPassword("password1234")
+                .newPassword("123456")
+                .build();
+
+        // when
+        boolean result = userService.updatePassword("heo", userPasswordUpdateDto);
+
+        // then
+        assertThat(result).isEqualTo(true);
     }
 
 }
