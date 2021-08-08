@@ -1,10 +1,13 @@
-package com.reservation.conference.service;
+package com.reservation.conference.user.service;
 
-import com.reservation.conference.dto.*;
 import com.reservation.conference.exception.*;
-import com.reservation.conference.mapper.UserMapper;
+import com.reservation.conference.user.dto.User;
+import com.reservation.conference.user.dto.UserLoginResponseDto;
+import com.reservation.conference.user.dto.UserPasswordUpdateDto;
+import com.reservation.conference.user.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,10 +20,10 @@ public class UserService {
     /***
      * 유저 로그인
      */
-    public User login(String id, String password) throws Exception {
+    public UserLoginResponseDto login(String id, String password) throws Exception {
 
         String encryptPassword = SecurityUtil.encryptPassword(password);
-        User userLoginInfo = userMapper.findUserByIdAndPassword(id, encryptPassword);
+        UserLoginResponseDto userLoginInfo = userMapper.findUserByIdAndPassword(id, encryptPassword);
 
         if(userLoginInfo == null) {
             throw new UserNotFoundException("해당 유저의 로그인 정보가 존재하지 않습니다.");
@@ -32,7 +35,7 @@ public class UserService {
     /***
      * 유저 회원가입
      */
-    public boolean join(User user) throws Exception {
+    public void join(User user) throws Exception {
 
         if(checkUserIdExist(user.getId())) {
             throw new DuplicationIdException("회원가입이 불가합니다. " + user.getId() + " 는 중복된 아이디 입니다.");
@@ -51,12 +54,12 @@ public class UserService {
                 .userDateBirth(user.getUserDateBirth())
                 .build();
 
-        int insertResult = userMapper.insertUser(newUser);
-        if(insertResult != 1) {
-            throw new FailToInsertException("insert하는 도중에 에러가 발생하였습니다.");
+        try {
+            userMapper.insertUser(newUser);
+        }catch(DataAccessException e) {
+            throw new FailToInsertException("insert하는 도중에 에러가 발생하였습니다.", e);
         }
 
-        return true;
     }
 
     /***

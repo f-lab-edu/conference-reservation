@@ -1,15 +1,14 @@
-package com.reservation.conference.mapper;
+package com.reservation.conference.user.mapper;
 
-import com.reservation.conference.dto.User;
-import com.reservation.conference.dto.UserInfoUpdateDto;
-import com.reservation.conference.dto.UserLoginDto;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.reservation.conference.dto.UserPasswordUpdateDto;
+import com.reservation.conference.user.dto.User;
+import com.reservation.conference.user.dto.UserLoginResponseDto;
+import com.reservation.conference.user.dto.UserPasswordUpdateDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @MybatisTest
 class UserMapperTest {
@@ -17,24 +16,25 @@ class UserMapperTest {
     @Autowired
     private UserMapper userMapper;
 
+
     @Test
     @DisplayName("테스트 데이터 확인 성공")
     public void testConfirmSuccess() {
-        UserLoginDto user = userMapper.findUserByIdAndPassword("heo", "password1234");
-        assertThat(user.getUserName()).isEqualTo("helo-ella");
+        UserLoginResponseDto user = userMapper.findUserByIdAndPassword("min", "conference");
+        assertThat(user.getUserName()).isEqualTo("minkeun");
     }
 
     @Test
     @DisplayName("테스트 데이터 확인 실패 - 유저이름 불일치")
     public void testConfirmFail1() {
-        UserLoginDto user = userMapper.findUserByIdAndPassword("min", "conference");
+        UserLoginResponseDto user = userMapper.findUserByIdAndPassword("min", "conference");
         assertThat(user.getUserName()).isNotEqualTo("helo-ella");
     }
 
     @Test
     @DisplayName("테스트 데이터 확인 실패 - 비밀번호 불일치")
     public void testConfirmFail2() {
-        UserLoginDto user = userMapper.findUserByIdAndPassword("min", "password1234");
+        UserLoginResponseDto user = userMapper.findUserByIdAndPassword("min", "wrongPassword");
         assertThat(user).isNull();
     }
 
@@ -45,11 +45,11 @@ class UserMapperTest {
                 .id("yeseul")
                 .password("1234")
                 .userName("heoella")
-                .email("heo@gmail.com")
-                .phoneNumber("010-1111-2222")
-                .organization("f-lab")
-                .gender("WOMAN")
-                .dateBirth("950307")
+                .userEmail("heo@gmail.com")
+                .userPhoneNumber("010-1111-2222")
+                .userOrganization("f-lab")
+                .userGender("WOMAN")
+                .userDateBirth("950307")
                 .build();
 
         int result = userMapper.insertUser(testUser);
@@ -91,14 +91,14 @@ class UserMapperTest {
     @DisplayName("회원정보 수정 성공")
     public void updateUserInfoSuccess(){
         // given
-        UserInfoUpdateDto updateUserInfo = UserInfoUpdateDto.builder()
+        User updateUserInfo = User.builder()
                 .id("heo")
                 .userName("ella")
-                .email("heo@naver.com")
-                .phoneNumber("010-9999-8888")
-                .organization("f-lab")
-                .gender("WOMAN")
-                .dateBirth("950227")
+                .userEmail("heo@naver.com")
+                .userPhoneNumber("010-9999-8888")
+                .userOrganization("f-lab")
+                .userGender("WOMAN")
+                .userDateBirth("950227")
                 .build();
 
         int result = userMapper.updateUserInfo(updateUserInfo);

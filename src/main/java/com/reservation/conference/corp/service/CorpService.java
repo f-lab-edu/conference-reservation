@@ -1,7 +1,7 @@
-package com.reservation.conference.service;
+package com.reservation.conference.corp.service;
 
-import com.reservation.conference.dto.CorpJoinDto;
-import com.reservation.conference.mapper.CorpMapper;
+import com.reservation.conference.corp.dto.CorpJoinDto;
+import com.reservation.conference.corp.mapper.CorpMapper;
 import com.reservation.conference.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,13 +12,15 @@ public class CorpService {
 
     private final CorpMapper corpMapper;
 
-
+    /**
+     * 기업 회원가입
+     */
     public boolean join(CorpJoinDto corpJoinDto) throws Exception {
         //아이디 중복 체크
-        boolean checkResult = checkCorpIdExist(corpJoinDto.getId());
-        if(!checkResult) {
-            return false;
-        }
+//        boolean checkResult = checkCorpIdExist(corpJoinDto.getId());
+//        if(!checkResult) {
+//            return false;
+//        }
 
         String encryptPassword = SecurityUtil.encryptPassword(corpJoinDto.getPassword());
         corpJoinDto.setPassword(encryptPassword);

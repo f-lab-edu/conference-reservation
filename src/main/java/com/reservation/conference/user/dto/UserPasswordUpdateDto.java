@@ -1,4 +1,4 @@
-package com.reservation.conference.dto;
+package com.reservation.conference.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;

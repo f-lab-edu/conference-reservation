@@ -1,4 +1,4 @@
-package com.reservation.conference.dto;
+package com.reservation.conference.corp.dto;
 
 import lombok.Getter;
 import lombok.Setter;

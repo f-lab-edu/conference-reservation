@@ -1,6 +1,6 @@
-package com.reservation.conference.controller;
+package com.reservation.conference.user.controller;
 
-import com.reservation.conference.dto.UserLoginDto;
+import com.reservation.conference.user.dto.UserLoginRequestDto;
 import com.reservation.conference.utils.HttpResponses;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class UserControllerIntegrationTest {
     @Test
     public void loginUserIntegrationTest() {
         final String url = "http://localhost:" + port + "/users/login";
-        UserLoginDto user = new UserLoginDto();
+        UserLoginRequestDto user = new UserLoginRequestDto();
         user.setId("testId2");
         user.setPassword("12345");
 

@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.reservation.conference.mapper.UserMapper">
-    <select id="findUserByIdAndPassword" resultType="com.reservation.conference.dto.User">
-        SELECT *
+<mapper namespace="com.reservation.conference.user.mapper.UserMapper">
+    <select id="findUserByIdAndPassword" resultType="com.reservation.conference.user.dto.UserLoginResponseDto">
+        SELECT id, user_name, user_email
           FROM USER
          WHERE id = #{id}
            AND password = #{password}
     </select>
 
-    <insert id="insertUser" parameterType="com.reservation.conference.dto.User">
+    <insert id="insertUser" parameterType="com.reservation.conference.user.dto.User">
         INSERT INTO USER
         (
           id
@@ -45,13 +45,13 @@
         WHERE id = #{id}
     </delete>
 
-    <update id="updatePassword" parameterType="com.reservation.conference.dto.User">
+    <update id="updatePassword" parameterType="com.reservation.conference.user.dto.User">
         UPDATE USER
         SET password = #{newPassword}
         WHERE id = #{id}
     </update>
 
-    <update id="updateUserInfo" parameterType="com.reservation.conference.dto.User">
+    <update id="updateUserInfo" parameterType="com.reservation.conference.user.dto.User">
         UPDATE USER
         SET user_name = #{userName}, email = #{email}, phone_number = #{phoneNumber}, organization = #{organization}, gender = #{gender}, date_birth = #{dateBirth}
         WHERE id = #{id}

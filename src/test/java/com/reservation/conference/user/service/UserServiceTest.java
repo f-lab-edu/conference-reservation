@@ -1,17 +1,17 @@
-package com.reservation.conference.service;
+package com.reservation.conference.user.service;
 
 
-import com.reservation.conference.dto.User;
-import com.reservation.conference.dto.UserInfoUpdateDto;
-import com.reservation.conference.dto.UserLoginDto;
-import com.reservation.conference.dto.UserPasswordUpdateDto;
+
+import com.reservation.conference.user.dto.User;
+import com.reservation.conference.user.dto.UserLoginResponseDto;
+import com.reservation.conference.user.dto.UserPasswordUpdateDto;
 import com.reservation.conference.utils.SecurityUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -30,20 +30,15 @@ class UserServiceTest {
     UserService userService;
 
     // Test Values
-    private String testUserId = "testId1";
-    private String testUserPassword = "12345";
-    private String testUserWrongPassword = "99999";
+    private final String testUserId = "testId1";
+    private final String testUserPassword = "12345";
+    private final String testUserWrongPassword = "99999";
 
     @Test
     @DisplayName("DB 유저 로그인 성공")
     void loginCheckSuccess() throws Exception {
-        //given
-        String userId = "testUser1";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword(userPassword); // 직접 암호화
-
         //when
-        UserLoginDto tsetUserInfo = userService.login(testUserId, testUserPassword);
+        UserLoginResponseDto tsetUserInfo = userService.login(testUserId, testUserPassword);
 
         //then
         assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
@@ -52,51 +47,8 @@ class UserServiceTest {
     @Test
     @DisplayName("DB 유저 로그인 실패_비밀번호 불일치")
     void loginCheckFail() throws Exception {
-        //given
-        String userId = "testUser2";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword("5678");  //틀린 비밀번호 암호화
 
         assertThat(userService.login(testUserId, testUserWrongPassword)).isNull();
-    }
-
-    @Test
-    @DisplayName("DB 회원가입 성공_아이디 중복 없음")
-    void joinSuccess() throws Exception {
-        // given
-        User testUser = User.builder()
-                .id("heoella")
-                .password("password1234")
-                .userName("heo-ella")
-                .email("heo@f-lab.com")
-                .phoneNumber("010-1111-1234")
-                .organization( "f-lab")
-                .gender("Woman")
-                .dateBirth("1995-03-07")
-                .build();
-
-        // when
-        boolean result = userService.join(testUser);
-
-        // then
-        assertThat(result).isEqualTo(true);
-
-    }
-
-    @Test
-    @DisplayName("DB 회원가입 실패_아이디 중복")
-    void joinFail() throws Exception {
-        // given
-        User testUser = User.builder()
-                .id("heo")
-                .password("password1234")
-                .build();
-
-        // when
-        boolean result = userService.join(testUser);
-
-        // then
-        assertThat(result).isEqualTo(false);
     }
 
     @Test
@@ -132,13 +84,13 @@ class UserServiceTest {
     @DisplayName("DB 회원 정보수정 성공_모든 필드에 값이 입력 되었을 경우")
     void updateUserInfoSuccess(){
         // given
-        UserInfoUpdateDto testUser = UserInfoUpdateDto.builder()
+        User testUser = User.builder()
                 .userName("updateElla")
-                .email("ella@gmail.com")
-                .phoneNumber("010-0000-1111")
-                .organization("f-lab")
-                .gender("WOMAN")
-                .dateBirth("000101")
+                .userEmail("ella@gmail.com")
+                .userPhoneNumber("010-0000-1111")
+                .userOrganization("f-lab")
+                .userGender("WOMAN")
+                .userDateBirth("000101")
                 .build();
 
         // when

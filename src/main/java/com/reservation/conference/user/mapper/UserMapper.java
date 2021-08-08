@@ -1,7 +1,9 @@
-package com.reservation.conference.mapper;
+package com.reservation.conference.user.mapper;
 
 
-import com.reservation.conference.dto.*;
+import com.reservation.conference.user.dto.User;
+import com.reservation.conference.user.dto.UserLoginResponseDto;
+import com.reservation.conference.user.dto.UserPasswordUpdateDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +12,7 @@ public interface UserMapper {
 
     int insertUser(User user);
 
-    User findUserByIdAndPassword(@Param("id") String id, @Param("password") String password);
+    UserLoginResponseDto findUserByIdAndPassword(@Param("id") String id, @Param("password") String password);
 
     boolean isExistId(String id);
 
