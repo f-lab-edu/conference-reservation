@@ -39,12 +39,14 @@ public class UserControllerTest {
     void loginSuccess() throws Exception {
         UserLoginDto userLoginInfo = new UserLoginDto();
         userLoginInfo.setId("testId1");
+        userLoginInfo.setPassword("12345");
 
         mockMvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userLoginInfo))
                 .session(httpSession))
-                .andExpect(status().isUnauthorized());  //실제 데이터가 없으므로 401 반환.
+                .andExpect(status().isOk());
     }
 
     @Test

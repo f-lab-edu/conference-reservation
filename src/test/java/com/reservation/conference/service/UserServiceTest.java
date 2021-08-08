@@ -2,16 +2,15 @@ package com.reservation.conference.service;
 
 
 import com.reservation.conference.dto.User;
-import com.reservation.conference.dto.UserInfoUpdateDto;
-import com.reservation.conference.dto.UserLoginDto;
 import com.reservation.conference.dto.UserPasswordUpdateDto;
-import com.reservation.conference.utils.SecurityUtil;
+import com.reservation.conference.exception.UserNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -29,7 +28,9 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
-    // Test Values
+    /**
+     * 유저 테스트 변수
+     */
     private String testUserId = "testId1";
     private String testUserPassword = "12345";
     private String testUserWrongPassword = "99999";
@@ -37,27 +38,18 @@ class UserServiceTest {
     @Test
     @DisplayName("DB 유저 로그인 성공")
     void loginCheckSuccess() throws Exception {
-        //given
-        String userId = "testUser1";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword(userPassword); // 직접 암호화
 
-        //when
-        UserLoginDto tsetUserInfo = userService.login(testUserId, testUserPassword);
+        User tsetUserInfo = userService.login(testUserId, testUserPassword);
 
-        //then
         assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
     }
 
     @Test
     @DisplayName("DB 유저 로그인 실패_비밀번호 불일치")
     void loginCheckFail() throws Exception {
-        //given
-        String userId = "testUser2";
-        String userPassword = "1234";
-        String testEncryptPassword = SecurityUtil.encryptPassword("5678");  //틀린 비밀번호 암호화
 
-        assertThat(userService.login(testUserId, testUserWrongPassword)).isNull();
+        //"해당 유저의 로그인 정보가 존재하지 않습니다."
+        assertThrows(UserNotFoundException.class, () -> userService.login(testUserId, testUserWrongPassword));
     }
 
     @Test
@@ -68,11 +60,11 @@ class UserServiceTest {
                 .id("heoella")
                 .password("password1234")
                 .userName("heo-ella")
-                .email("heo@f-lab.com")
-                .phoneNumber("010-1111-1234")
-                .organization( "f-lab")
-                .gender("Woman")
-                .dateBirth("1995-03-07")
+                .userEmail("heo@f-lab.com")
+                .userPhoneNumber("010-1111-1234")
+                .userOrganization( "f-lab")
+                .userGender("Woman")
+                .userDateBirth("1995-03-07")
                 .build();
 
         // when
@@ -80,7 +72,6 @@ class UserServiceTest {
 
         // then
         assertThat(result).isEqualTo(true);
-
     }
 
     @Test
@@ -90,6 +81,12 @@ class UserServiceTest {
         User testUser = User.builder()
                 .id("heo")
                 .password("password1234")
+                .userName("heo-ella")
+                .userEmail("heo@f-lab.com")
+                .userPhoneNumber("010-1111-1234")
+                .userOrganization( "f-lab")
+                .userGender("Woman")
+                .userDateBirth("1995-03-07")
                 .build();
 
         // when
@@ -123,7 +120,7 @@ class UserServiceTest {
                 .password("password1234")
                 .build();
 
-        boolean result = userService.deleteUser(testUser, "1234");
+        boolean result = userService.deleteUser(testUser, "wrongPassword");
 
         assertThat(result).isEqualTo(false);
     }
@@ -132,13 +129,13 @@ class UserServiceTest {
     @DisplayName("DB 회원 정보수정 성공_모든 필드에 값이 입력 되었을 경우")
     void updateUserInfoSuccess(){
         // given
-        UserInfoUpdateDto testUser = UserInfoUpdateDto.builder()
+        User testUser = User.builder()
                 .userName("updateElla")
-                .email("ella@gmail.com")
-                .phoneNumber("010-0000-1111")
-                .organization("f-lab")
-                .gender("WOMAN")
-                .dateBirth("000101")
+                .userEmail("ella@gmail.com")
+                .userPhoneNumber("010-0000-1111")
+                .userOrganization("f-lab")
+                .userGender("WOMAN")
+                .userDateBirth("000101")
                 .build();
 
         // when
@@ -146,10 +143,7 @@ class UserServiceTest {
 
         // then
         assertThat(result).isEqualTo(1);
-
     }
-
-
 
     @Test
     @DisplayName("DB 비밀번호 수정 성공")
@@ -167,4 +161,5 @@ class UserServiceTest {
         // then
         assertThat(result).isEqualTo(true);
     }
+
 }
