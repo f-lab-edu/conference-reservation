@@ -23,10 +23,10 @@ dependencies {
     implementation 'mysql:mysql-connector-java:5.1.46'
     implementation 'junit:junit:4.13.1'
 
-	  compileOnly "org.projectlombok:lombok:${lombok_version}"
-	  annotationProcessor "org.projectlombok:lombok:${lombok_version}"
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+	annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 
-	  testCompileOnly "org.projectlombok:lombok:${lombok_version}"
+	testCompileOnly "org.projectlombok:lombok:${lombok_version}"
   	testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
