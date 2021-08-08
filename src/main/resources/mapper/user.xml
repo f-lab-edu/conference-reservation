@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.reservation.conference.mapper.UserMapper">
-    <select id="findUserByIdAndPassword" resultType="com.reservation.conference.dto.UserLoginDto">
+    <select id="findUserByIdAndPassword" resultType="com.reservation.conference.dto.User">
         SELECT *
           FROM USER
          WHERE id = #{id}
@@ -11,8 +11,28 @@
     </select>
 
     <insert id="insertUser" parameterType="com.reservation.conference.dto.User">
-        INSERT INTO USER(id, password, user_name, email, phone_number, organization, gender, date_birth)
-        VALUES(#{id}, #{password}, #{userName}, #{email}, #{phoneNumber}, #{organization}, #{gender}, #{dateBirth})
+        INSERT INTO USER
+        (
+          id
+        , password
+        , user_name
+        , user_email
+        , user_phone_number
+        , user_organization
+        , user_gender
+        , user_date_birth
+        )
+        VALUES
+        (
+            #{id}
+          , #{password}
+          , #{userName}
+          , #{userEmail}
+          , #{userPhoneNumber}
+          , #{userOrganization}
+          , #{userGender}
+          , #{userDateBirth}
+        )
     </insert>
 
     <select id="isExistId" parameterType="String" resultType="boolean">

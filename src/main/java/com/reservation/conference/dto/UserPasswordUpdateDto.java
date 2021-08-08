@@ -12,4 +12,3 @@ public class UserPasswordUpdateDto {
     private String newPassword;
 
 }
-
