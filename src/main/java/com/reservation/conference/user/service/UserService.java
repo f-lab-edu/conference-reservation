@@ -1,9 +1,7 @@
 package com.reservation.conference.user.service;
 
+import com.reservation.conference.user.dto.*;
 import com.reservation.conference.exception.*;
-import com.reservation.conference.user.dto.User;
-import com.reservation.conference.user.dto.UserLoginResponseDto;
-import com.reservation.conference.user.dto.UserPasswordUpdateDto;
 import com.reservation.conference.user.mapper.UserMapper;
 import com.reservation.conference.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
