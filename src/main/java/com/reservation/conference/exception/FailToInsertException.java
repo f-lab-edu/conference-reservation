@@ -6,4 +6,7 @@ public class FailToInsertException extends ServerException {
         super(msg);
     }
 
+    public FailToInsertException(String msg, Throwable errorCode) {
+        super(msg, errorCode);
+    }
 }

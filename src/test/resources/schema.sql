@@ -1,5 +1,7 @@
 drop table if exists USER;
 
+drop table if exists CORP;
+
 create table USER
 (
     ID              varchar(20) NOT NULL ,

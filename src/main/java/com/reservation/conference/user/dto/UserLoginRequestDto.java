@@ -1,14 +1,13 @@
-package com.reservation.conference.dto;
+package com.reservation.conference.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserLoginDto {
+public class UserLoginRequestDto {
 
     private String id;
     private String password;
-    private String userName;
 
 }

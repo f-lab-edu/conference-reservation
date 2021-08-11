@@ -6,4 +6,8 @@ public class ServerException extends RuntimeException {
         super(msg);
     }
 
+    public ServerException(String msg, Throwable errorCode) {
+        super(msg, errorCode);
+    }
+
 }

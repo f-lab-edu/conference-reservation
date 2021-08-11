@@ -1,14 +1,22 @@
-package com.reservation.conference.mapper;
+package com.reservation.conference.user.mapper;
 
+<<<<<<< HEAD:src/test/java/com/reservation/conference/mapper/UserMapperTest.java
 import com.reservation.conference.dto.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.reservation.conference.dto.UserPasswordUpdateDto;
+=======
+import com.reservation.conference.user.dto.User;
+import com.reservation.conference.user.dto.UserLoginResponseDto;
+import com.reservation.conference.user.dto.UserPasswordUpdateDto;
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/mapper/UserMapperTest.java
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @MybatisTest
 class UserMapperTest {
@@ -18,24 +26,38 @@ class UserMapperTest {
 
 
     @Test
+<<<<<<< HEAD:src/test/java/com/reservation/conference/mapper/UserMapperTest.java
     @DisplayName("로그인 데이터 확인 성공")
     public void loginSuccess() {
         User user = userMapper.findUserByIdAndPassword("min", "conference");
 
+=======
+    @DisplayName("테스트 데이터 확인 성공")
+    public void testConfirmSuccess() {
+        UserLoginResponseDto user = userMapper.findUserByIdAndPassword("min", "conference");
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/mapper/UserMapperTest.java
         assertThat(user.getUserName()).isEqualTo("minkeun");
     }
 
     @Test
     @DisplayName("테스트 데이터 확인 실패 - 유저이름 불일치")
     public void testConfirmFail1() {
+<<<<<<< HEAD:src/test/java/com/reservation/conference/mapper/UserMapperTest.java
         User user = userMapper.findUserByIdAndPassword("min", "conference");
+=======
+        UserLoginResponseDto user = userMapper.findUserByIdAndPassword("min", "conference");
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/mapper/UserMapperTest.java
         assertThat(user.getUserName()).isNotEqualTo("helo-ella");
     }
 
     @Test
     @DisplayName("테스트 데이터 확인 실패 - 비밀번호 불일치")
     public void testConfirmFail2() {
+<<<<<<< HEAD:src/test/java/com/reservation/conference/mapper/UserMapperTest.java
         User user = userMapper.findUserByIdAndPassword("min", "password1234");
+=======
+        UserLoginResponseDto user = userMapper.findUserByIdAndPassword("min", "wrongPassword");
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/mapper/UserMapperTest.java
         assertThat(user).isNull();
     }
 
@@ -45,12 +67,21 @@ class UserMapperTest {
         User testUser = User.builder()
                 .id("yeseul")
                 .password("1234")
+<<<<<<< HEAD:src/test/java/com/reservation/conference/mapper/UserMapperTest.java
                 .userName("heo-ella")
                 .userEmail("heo@f-lab.com")
                 .userPhoneNumber("010-1111-1234")
                 .userOrganization( "f-lab")
                 .userGender("Woman")
                 .userDateBirth("1995-03-07")
+=======
+                .userName("heoella")
+                .userEmail("heo@gmail.com")
+                .userPhoneNumber("010-1111-2222")
+                .userOrganization("f-lab")
+                .userGender("WOMAN")
+                .userDateBirth("950307")
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/mapper/UserMapperTest.java
                 .build();
 
         int result = userMapper.insertUser(testUser);
@@ -97,7 +128,11 @@ class UserMapperTest {
                 .userName("ella")
                 .userEmail("heo@naver.com")
                 .userPhoneNumber("010-9999-8888")
+<<<<<<< HEAD:src/test/java/com/reservation/conference/mapper/UserMapperTest.java
                 .userOrganization("student")
+=======
+                .userOrganization("f-lab")
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/mapper/UserMapperTest.java
                 .userGender("WOMAN")
                 .userDateBirth("950227")
                 .build();

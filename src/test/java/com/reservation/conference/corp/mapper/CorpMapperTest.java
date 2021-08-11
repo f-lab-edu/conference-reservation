@@ -1,6 +1,7 @@
-package com.reservation.conference.mapper;
+package com.reservation.conference.corp.mapper;
 
-import com.reservation.conference.dto.CorpJoinDto;
+import com.reservation.conference.corp.dto.CorpJoinDto;
+import com.reservation.conference.corp.mapper.CorpMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,10 @@
-package com.reservation.conference.controller;
+package com.reservation.conference.user.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reservation.conference.dto.UserLoginDto;
-import com.reservation.conference.service.UserService;
+import com.reservation.conference.user.dto.User;
+import com.reservation.conference.user.dto.UserLoginRequestDto;
+import com.reservation.conference.user.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,16 +15,17 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(UserController.class)
+@WebMvcTest(UserController.class) //-> @Service, @Component, @Repository 사용 불가
 public class UserControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    MockMvc mockMvc;    //웹API를 테스트하기 위해서 사용
 
     @MockBean
     UserService userService;
@@ -37,7 +39,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("로그인 API 성공 테스트")
     void loginSuccess() throws Exception {
-        UserLoginDto userLoginInfo = new UserLoginDto();
+        UserLoginRequestDto userLoginInfo = new UserLoginRequestDto();
         userLoginInfo.setId("testId1");
         userLoginInfo.setPassword("12345");
 

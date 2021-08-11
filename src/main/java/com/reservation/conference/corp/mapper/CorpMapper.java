@@ -1,6 +1,6 @@
-package com.reservation.conference.mapper;
+package com.reservation.conference.corp.mapper;
 
-import com.reservation.conference.dto.CorpJoinDto;
+import com.reservation.conference.corp.dto.CorpJoinDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

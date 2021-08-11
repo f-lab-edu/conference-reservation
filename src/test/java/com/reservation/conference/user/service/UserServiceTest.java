@@ -1,16 +1,27 @@
-package com.reservation.conference.service;
+package com.reservation.conference.user.service;
 
 
+<<<<<<< HEAD:src/test/java/com/reservation/conference/service/UserServiceTest.java
 import com.reservation.conference.dto.User;
 import com.reservation.conference.dto.UserPasswordUpdateDto;
 import com.reservation.conference.exception.UserNotFoundException;
+=======
+
+import com.reservation.conference.user.dto.User;
+import com.reservation.conference.user.dto.UserLoginResponseDto;
+import com.reservation.conference.user.dto.UserPasswordUpdateDto;
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/service/UserServiceTest.java
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+<<<<<<< HEAD:src/test/java/com/reservation/conference/service/UserServiceTest.java
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+=======
+import static org.assertj.core.api.Assertions.assertThat;
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/service/UserServiceTest.java
 
 
 /**
@@ -28,18 +39,30 @@ class UserServiceTest {
     @Autowired
     UserService userService;
 
+<<<<<<< HEAD:src/test/java/com/reservation/conference/service/UserServiceTest.java
     /**
      * 유저 테스트 변수
      */
     private String testUserId = "testId1";
     private String testUserPassword = "12345";
     private String testUserWrongPassword = "99999";
+=======
+    // Test Values
+    private final String testUserId = "testId1";
+    private final String testUserPassword = "12345";
+    private final String testUserWrongPassword = "99999";
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/service/UserServiceTest.java
 
     @Test
     @DisplayName("DB 유저 로그인 성공")
     void loginCheckSuccess() throws Exception {
+<<<<<<< HEAD:src/test/java/com/reservation/conference/service/UserServiceTest.java
 
         User tsetUserInfo = userService.login(testUserId, testUserPassword);
+=======
+        //when
+        UserLoginResponseDto tsetUserInfo = userService.login(testUserId, testUserPassword);
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/service/UserServiceTest.java
 
         assertThat(testUserId).isEqualTo(tsetUserInfo.getId());
     }
@@ -53,6 +76,7 @@ class UserServiceTest {
     }
 
     @Test
+<<<<<<< HEAD:src/test/java/com/reservation/conference/service/UserServiceTest.java
     @DisplayName("DB 회원가입 성공_아이디 중복 없음")
     void joinSuccess() throws Exception {
         // given
@@ -97,6 +121,8 @@ class UserServiceTest {
     }
 
     @Test
+=======
+>>>>>>> feature/9:src/test/java/com/reservation/conference/user/service/UserServiceTest.java
     @DisplayName("DB 회원탈퇴 성공_비밀번호 일치")
     void deleteUserSuccess() throws Exception {
         // given
