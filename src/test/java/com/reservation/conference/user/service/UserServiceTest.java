@@ -5,7 +5,6 @@ package com.reservation.conference.user.service;
 import com.reservation.conference.user.dto.User;
 import com.reservation.conference.user.dto.UserLoginResponseDto;
 import com.reservation.conference.user.dto.UserPasswordUpdateDto;
-import com.reservation.conference.utils.SecurityUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
